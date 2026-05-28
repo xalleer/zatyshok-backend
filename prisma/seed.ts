@@ -10,11 +10,8 @@ const prisma = new PrismaClient({ adapter });
 async function main() {
   console.log('🌱 Починаємо seeding бази даних...');
 
-  // 1. Очищення старих даних (корисно під час розробки)
-  // Видаляємо юзерів, а завдяки onDelete: Cascade видаляться і їхні Property, Units та Bookings
   await prisma.user.deleteMany();
 
-  // 2. Створюємо Власника (HOST)
   const host = await prisma.user.create({
     data: {
       phone: '+380501112233',
@@ -23,7 +20,6 @@ async function main() {
     },
   });
 
-  // 3. Створюємо Клієнта (CLIENT)
   const client = await prisma.user.create({
     data: {
       phone: '+380679998877',
@@ -32,8 +28,6 @@ async function main() {
     },
   });
 
-  // 4. Створюємо Базу відпочинку (Property)
-  // Зверни увагу: координати тут не передаємо, бо Prisma їх не розуміє
   const property = await prisma.property.create({
     data: {
       name: 'Глемпінг "Лісова Пісня"',
@@ -49,16 +43,12 @@ async function main() {
     },
   });
 
-  // 5. МАГІЯ POSTGIS: Оновлюємо координати бази через Raw SQL
-  // ST_MakePoint приймає (довгота, широта).
-  // 34.5514, 49.5883 - це приблизні координати Полтави
   await prisma.$executeRaw`
     UPDATE "Property"
     SET location = ST_SetSRID(ST_MakePoint(34.5514, 49.5883), 4326)
     WHERE id = ${property.id};
   `;
 
-  // 6. Створюємо Одиниці оренди (Units) для цієї бази
   await prisma.unit.createMany({
     data: [
       {
