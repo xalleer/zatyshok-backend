@@ -1,0 +1,25 @@
+generator client {
+  provider        = "prisma-client"
+  output          = "../generated/prisma"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+datasource db {
+  provider   = "postgresql"
+  extensions = [postgis]
+}
+
+model User {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  name      String?
+  phone     String   @unique
+  role      Role     @default(CLIENT)
+}
+
+enum Role {
+  CLIENT
+  HOST
+  ADMIN
+}
