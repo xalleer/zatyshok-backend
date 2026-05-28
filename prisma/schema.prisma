@@ -1,6 +1,5 @@
 generator client {
-  provider        = "prisma-client"
-  output          = "../generated/prisma"
+  provider        = "prisma-client-js"
   previewFeatures = ["postgresqlExtensions"]
 }
 
@@ -10,16 +9,132 @@ datasource db {
 }
 
 model User {
+  id         String     @id @default(uuid())
+  createdAt  DateTime   @default(now()) @map("created_at")
+  updatedAt  DateTime   @updatedAt @map("updated_at")
+  name       String?
+  phone      String     @unique
+  role       Role       @default(CLIENT)
+  properties Property[] @relation("HostProperties")
+  bookings   Booking[]  @relation("ClientBookings")
+}
+
+model Property {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
-  name      String?
-  phone     String   @unique
-  role      Role     @default(CLIENT)
+
+  name        String
+  slug        String  @unique
+  description String?
+
+  coverImage String?
+  images     String[]
+
+  city     String?
+  address  String?
+  location Unsupported("geometry(Point, 4326)")?
+
+  policy   CancellationPolicy @default(FLEXIBLE)
+  isActive Boolean            @default(true)
+
+  hostId String
+  host   User   @relation("HostProperties", fields: [hostId], references: [id], onDelete: Cascade)
+
+  units   Unit[]
+  reviews Review[]
+}
+
+model Unit {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  name        String
+  description String?
+  price       Int
+  capacity    Int
+
+  images   String[]
+  features String[]
+
+  propertyId String
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  bookings Booking[]
+}
+
+model Booking {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  checkIn  DateTime
+  checkOut DateTime
+  status   BookingStatus @default(HOLD)
+
+  totalPrice       Int
+  prepaymentAmount Int?
+  paymentMethod    PaymentMethod @default(ONLINE)
+
+  comment String?
+
+  userId String
+  user   User   @relation("ClientBookings", fields: [userId], references: [id])
+
+  unitId String
+  unit   Unit   @relation(fields: [unitId], references: [id])
+
+  review      Review?
+  transaction Transaction?
+}
+
+model Transaction {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+
+  amount     Int
+  providerId String?
+  status     String
+
+  bookingId String  @unique
+  booking   Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+}
+
+model Review {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+
+  rating  Int
+  comment String?
+
+  bookingId String  @unique
+  booking   Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+
+  propertyId String
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
 }
 
 enum Role {
   CLIENT
   HOST
   ADMIN
+}
+
+enum CancellationPolicy {
+  FLEXIBLE
+  STRICT
+}
+
+enum BookingStatus {
+  HOLD // Тимчасово заблоковано в Redis/БД на 15 хв
+  PENDING // Очікує підтвердження від власника (для Request Booking)
+  CONFIRMED // Успішно заброньовано (оплачено/підтверджено)
+  CANCELLED // Скасовано клієнтом або власником
+  COMPLETED // Клієнт виїхав (можна залишати відгук)
+}
+
+enum PaymentMethod {
+  ONLINE
+  CASH
 }
