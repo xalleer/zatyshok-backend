@@ -6,6 +6,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { RedisModule } from './redis/redis.module';
 import { AuthModule } from './auth/auth.module';
 import { PropertyModule } from './property/property.module';
+import { UnitModule } from './unit/unit.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { PropertyModule } from './property/property.module';
     RedisModule,
     AuthModule,
     PropertyModule,
+    UnitModule,
   ],
   controllers: [AppController],
   providers: [AppService],
