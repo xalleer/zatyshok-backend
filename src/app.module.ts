@@ -7,6 +7,7 @@ import { RedisModule } from './redis/redis.module';
 import { AuthModule } from './auth/auth.module';
 import { PropertyModule } from './property/property.module';
 import { UnitModule } from './unit/unit.module';
+import { BookingModule } from './booking/booking.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { UnitModule } from './unit/unit.module';
     AuthModule,
     PropertyModule,
     UnitModule,
+    BookingModule,
   ],
   controllers: [AppController],
   providers: [AppService],
