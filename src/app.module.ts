@@ -8,6 +8,7 @@ import { AuthModule } from './auth/auth.module';
 import { PropertyModule } from './property/property.module';
 import { UnitModule } from './unit/unit.module';
 import { BookingModule } from './booking/booking.module';
+import { ReviewModule } from './review/review.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { BookingModule } from './booking/booking.module';
     PropertyModule,
     UnitModule,
     BookingModule,
+    ReviewModule,
   ],
   controllers: [AppController],
   providers: [AppService],
