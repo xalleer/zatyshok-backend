@@ -9,6 +9,7 @@ import { PropertyModule } from './property/property.module';
 import { UnitModule } from './unit/unit.module';
 import { BookingModule } from './booking/booking.module';
 import { ReviewModule } from './review/review.module';
+import { MediaModule } from './media/media.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { ReviewModule } from './review/review.module';
     UnitModule,
     BookingModule,
     ReviewModule,
+    MediaModule,
   ],
   controllers: [AppController],
   providers: [AppService],
