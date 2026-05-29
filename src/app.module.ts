@@ -10,6 +10,7 @@ import { UnitModule } from './unit/unit.module';
 import { BookingModule } from './booking/booking.module';
 import { ReviewModule } from './review/review.module';
 import { MediaModule } from './media/media.module';
+import { GeoModule } from './geo/geo.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { MediaModule } from './media/media.module';
     BookingModule,
     ReviewModule,
     MediaModule,
+    GeoModule,
   ],
   controllers: [AppController],
   providers: [AppService],
