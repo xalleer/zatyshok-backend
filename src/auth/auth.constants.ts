@@ -1,0 +1,10 @@
+export const OTP_EXPIRY_SECONDS = 300;
+export const OTP_LENGTH = 4;
+export const OTP_MIN = 1000;
+export const OTP_MAX = 9999;
+export const COOKIE_MAX_AGE_DAYS = 7;
+export const COOKIE_MAX_AGE_MS = COOKIE_MAX_AGE_DAYS * 24 * 60 * 60 * 1000;
+export const ACCESS_TOKEN_COOKIE_NAME = 'access_token';
+export const DEFAULT_USER_ROLE = 'CLIENT';
+export const JWT_EXPIRES_IN = '7d';
+export const OTP_REDIS_PREFIX = 'otp:';
