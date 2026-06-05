@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable, Inject, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import Redis from 'ioredis';
 import { JwtService } from '@nestjs/jwt';
@@ -32,7 +32,7 @@ export class AuthService {
   }
 
   async verifyOtp(dto: VerifyOtpDto) {
-    const { phone, code } = dto;
+    const { phone, code, role } = dto;
     const redisKey = getOtpRedisKey(phone);
     const savedCode = await this.redis.get(redisKey);
 
@@ -46,7 +46,7 @@ export class AuthService {
 
     if (!user) {
       user = await this.prisma.user.create({
-        data: { phone, role: DEFAULT_USER_ROLE },
+        data: { phone, role: role ?? DEFAULT_USER_ROLE },
       });
     }
 
@@ -59,6 +59,17 @@ export class AuthService {
       message: 'Authentication successful',
       user,
       accessToken,
+    };
+  }
+
+  async checkAuth(userId: string) {
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    return {
+      message: 'User authorized',
+      user,
     };
   }
 }

@@ -1,5 +1,13 @@
-import { IsString, IsNotEmpty, Matches, Length } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  Matches,
+  Length,
+  IsEnum,
+  IsOptional,
+} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { Role } from '@prisma/client';
 
 export class VerifyOtpDto {
   @ApiProperty({
@@ -22,4 +30,13 @@ export class VerifyOtpDto {
   @Length(4, 4, { message: 'OTP code must be exactly 4 digits' })
   @Matches(/^[0-9]{4}$/, { message: 'OTP code must contain only digits' })
   code: string;
+
+  @ApiProperty({
+    example: 'HOST',
+    description: 'User role',
+  })
+  @IsOptional()
+  @IsString()
+  @IsEnum(Role)
+  role: Role;
 }
