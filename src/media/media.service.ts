@@ -56,8 +56,11 @@ export class MediaService {
   private uploadToCloudinary(
     file: Express.Multer.File,
     folder: string,
+    timeoutMs = 60000,
   ): Promise<UploadApiResponse> {
     return new Promise((resolve, reject) => {
+      let timeoutId: NodeJS.Timeout;
+
       const stream = cloudinary.uploader.upload_stream(
         {
           folder,
@@ -69,10 +72,25 @@ export class MediaService {
           ],
         },
         (error, result) => {
+          clearTimeout(timeoutId);
+          if (error?.message?.includes('timeout') || error?.name === 'TimeoutError') {
+            return reject(new BadRequestException('Час очікування завантаження вичерпано. Спробуйте файл меншого розміру або перевірте з\'єднання.'));
+          }
           if (error || !result) return reject(error ?? new Error('Cloudinary upload failed'));
           resolve(result);
         },
       );
+
+      timeoutId = setTimeout(() => {
+        stream.destroy();
+        reject(new BadRequestException('Час очікування завантаження вичерпано (60 сек). Спробуйте файл меншого розміру.'));
+      }, timeoutMs);
+
+      stream.on('error', (err) => {
+        clearTimeout(timeoutId);
+        this.logger.error(`Cloudinary stream error: ${err.message}`, err.stack);
+        reject(new BadRequestException('Помилка завантаження файлу. Перевірте з\'єднання з інтернетом.'));
+      });
 
       Readable.from(file.buffer).pipe(stream);
     });
@@ -178,6 +196,49 @@ export class MediaService {
     });
 
     return { coverImage: imageUrl };
+  }
+
+  /**
+   * Завантажує файл та встановлює його як обкладинку.
+   * Файл додається до масиву images та стає coverImage.
+   */
+  async uploadCoverImage(
+    propertyId: string,
+    hostId: string,
+    file: Express.Multer.File,
+  ): Promise<{ coverImage: string }> {
+    const property = await this.prisma.property.findFirst({
+      where: { id: propertyId, hostId },
+    });
+
+    if (!property) {
+      throw new NotFoundException(
+        'Об\'єкт не знайдено або ви не є його власником',
+      );
+    }
+
+    this.validateFile(file);
+
+    try {
+      const result = await this.uploadToCloudinary(file, CLOUDINARY_FOLDER.PROPERTY);
+      const imageUrl = result.secure_url;
+
+      await this.prisma.property.update({
+        where: { id: propertyId },
+        data: {
+          images: { push: imageUrl },
+          coverImage: imageUrl,
+        },
+      });
+
+      return { coverImage: imageUrl };
+    } catch (error) {
+      if (error instanceof BadRequestException) {
+        throw error;
+      }
+      this.logger.error(`Cloudinary upload failed: ${error.message}`, error.stack);
+      throw new BadRequestException('Не вдалося завантажити файл. Сервіс тимчасово недоступний.');
+    }
   }
 
   /**

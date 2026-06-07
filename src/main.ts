@@ -10,8 +10,14 @@ async function bootstrap() {
   app.enableShutdownHooks();
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
 
+  // app.enableCors({
+  //   origin: 'http://localhost:4000',
+  //   credentials: true,
+  //   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+  //   allowedHeaders: ['Content-Type', 'Authorization'],
+  // });
   app.enableCors({
-    origin: 'http://localhost:4000',
+    origin: true,
     credentials: true,
   });
 
@@ -28,6 +34,6 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
-  await app.listen(process.env.PORT ?? 3000);
+  await app.listen(process.env.PORT ?? 8080);
 }
 bootstrap();

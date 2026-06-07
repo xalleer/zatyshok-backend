@@ -7,6 +7,7 @@ import {
   Body,
   UseGuards,
   UseInterceptors,
+  UploadedFile,
   UploadedFiles,
   BadRequestException,
   HttpCode,
@@ -21,7 +22,7 @@ import {
   ApiConsumes,
   ApiBody,
 } from '@nestjs/swagger';
-import { FilesInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { memoryStorage } from 'multer';
 import { MediaService } from './media.service';
 import { UploadResponseDto } from './dto/upload-response.dto';
@@ -80,26 +81,34 @@ export class MediaController {
 
   /**
    * PATCH /media/properties/:propertyId/cover
-   * Встановити існуюче фото як обкладинку.
+   * Завантажити файл та встановити його як обкладинку.
    */
   @Patch('properties/:propertyId/cover')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: memoryStorage(),
+    }),
+  )
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'Встановити обкладинку об\'єкта' })
+  @ApiOperation({ summary: 'Завантажити та встановити обкладинку об\'єкта' })
   @ApiParam({ name: 'propertyId' })
+  @ApiConsumes('multipart/form-data')
   @ApiBody({
     schema: {
       type: 'object',
-      properties: { imageUrl: { type: 'string', example: 'https://res.cloudinary.com/...' } },
+      properties: {
+        file: { type: 'string', format: 'binary' },
+      },
     },
   })
   @ApiResponse({ status: 200, schema: { properties: { coverImage: { type: 'string' } } } })
   setCover(
     @Param('propertyId') propertyId: string,
     @CurrentUser('id') hostId: string,
-    @Body('imageUrl') imageUrl: string,
+    @UploadedFile() file: Express.Multer.File,
   ): Promise<{ coverImage: string }> {
-    if (!imageUrl) throw new BadRequestException('imageUrl не вказано');
-    return this.mediaService.setCoverImage(propertyId, hostId, imageUrl);
+    if (!file) throw new BadRequestException('Файл не передано');
+    return this.mediaService.uploadCoverImage(propertyId, hostId, file);
   }
 
   /**

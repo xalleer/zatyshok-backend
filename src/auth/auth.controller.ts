@@ -30,12 +30,12 @@ export class AuthController {
     @Body() dto: VerifyOtpDto,
     @Res({ passthrough: true }) res: Response,
   ) {
-    const { accessToken, user, message } =
+    const { accessToken, user, message, property } =
       await this.authService.verifyOtp(dto);
 
     setAuthCookie(res, accessToken);
 
-    return { message, user };
+    return { message, user, property };
   }
 
   @Get('check-auth')
@@ -45,7 +45,7 @@ export class AuthController {
   async testAuth(@CurrentUser('id') userId: string) {
     const { user, message } = await this.authService.checkAuth(userId);
 
-    return {  message, user };
+    return { message, user };
   }
 
   @Post('logout')

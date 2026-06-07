@@ -10,6 +10,7 @@ import {
 } from './helpers/otp.helper';
 import { DEFAULT_USER_ROLE, JWT_EXPIRES_IN } from './auth.constants';
 import { InvalidOtpException } from './exceptions/auth.exceptions';
+import { Role } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
@@ -55,10 +56,16 @@ export class AuthService {
       expiresIn: JWT_EXPIRES_IN,
     });
 
+    const property =
+      user.role === Role.HOST
+        ? await this.prisma.property.findFirst({ where: { hostId: user.id } })
+        : null;
+
     return {
       message: 'Authentication successful',
       user,
       accessToken,
+      property,
     };
   }
 
