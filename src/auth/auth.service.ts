@@ -1,4 +1,4 @@
-import { Injectable, Inject, NotFoundException } from '@nestjs/common';
+import { Injectable, Inject, NotFoundException, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import Redis from 'ioredis';
 import { JwtService } from '@nestjs/jwt';
@@ -11,14 +11,22 @@ import {
 import { DEFAULT_USER_ROLE, JWT_EXPIRES_IN } from './auth.constants';
 import { InvalidOtpException } from './exceptions/auth.exceptions';
 import { Role } from '@prisma/client';
+import { Telegraf } from 'telegraf';
 
 @Injectable()
 export class AuthService {
+  private readonly logger = new Logger(AuthService.name);
+  private readonly bot: Telegraf;
+
   constructor(
     private prisma: PrismaService,
     private jwtService: JwtService,
     @Inject('REDIS_CLIENT') private readonly redis: Redis,
-  ) {}
+    @Inject('BOT_TOKEN') private readonly botToken: string,
+    @Inject('BOT_CHAT_ID') private readonly botChatId: string,
+  ) {
+    this.bot = new Telegraf(this.botToken);
+  }
 
   async sendOtp(phone: string) {
     const otpCode = generateOtp();
@@ -27,7 +35,16 @@ export class AuthService {
 
     await this.redis.set(redisKey, otpCode, 'EX', expiry);
 
-    console.log(`[MOCK SMS] OTP ${otpCode} sent to ${phone}`);
+    try {
+      await this.bot.telegram.sendMessage(
+        this.botChatId,
+        `🔐 OTP код для ${phone}: <b>${otpCode}</b>\n\nДійсний ${expiry / 60} хв`,
+        { parse_mode: 'HTML' }
+      );
+      this.logger.log(`OTP ${otpCode} sent to Telegram for ${phone}`);
+    } catch (error) {
+      this.logger.error(`Failed to send OTP via Telegram: ${error.message}`);
+    }
 
     return { message: 'OTP sent successfully', expiresIn: `${expiry} seconds` };
   }
