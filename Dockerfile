@@ -10,8 +10,10 @@ RUN npm ci
 
 COPY . .
 
-RUN npx prisma generate
+# Тимчасовий URL лише для prisma generate під час build
+ENV DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy"
 
+RUN npx prisma generate
 RUN npm run build
 
 # Stage 2: Production
@@ -23,6 +25,9 @@ COPY package*.json ./
 COPY prisma ./prisma/
 
 RUN npm ci && npm cache clean --force
+
+# Тимчасовий URL лише для prisma generate
+ENV DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy"
 
 RUN npx prisma generate
 
