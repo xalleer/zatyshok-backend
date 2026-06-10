@@ -22,7 +22,10 @@ import { CreateBookingDto } from './dto/create-booking.dto';
 import { ConfirmBookingDto } from './dto/confirm-booking.dto';
 import { BookingResponseDto } from './dto/booking-response.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { BookingAccessGuard, BookingHostGuard } from './guards/booking-access.guard';
+import {
+  BookingAccessGuard,
+  BookingHostGuard,
+} from './guards/booking-access.guard';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 
 @ApiTags('bookings')
@@ -42,7 +45,8 @@ export class BookingController {
   @Post()
   @ApiOperation({
     summary: 'Забронювати юніт (HOLD на 15 хв)',
-    description: 'Створює бронювання зі статусом HOLD. Дати блокуються на 15 хвилин для інших клієнтів.',
+    description:
+      'Створює бронювання зі статусом HOLD. Дати блокуються на 15 хвилин для інших клієнтів.',
   })
   @ApiResponse({ status: 201, type: BookingResponseDto })
   @ApiResponse({ status: 409, description: 'Дати вже зайняті' })
@@ -63,7 +67,8 @@ export class BookingController {
   @Post('block')
   @ApiOperation({
     summary: 'Заблокувати дати вручну (HOST)',
-    description: 'Власник блокує дати без участі клієнта. Статус одразу CONFIRMED.',
+    description:
+      'Власник блокує дати без участі клієнта. Статус одразу CONFIRMED.',
   })
   @ApiResponse({ status: 201, type: BookingResponseDto })
   block(
@@ -87,7 +92,7 @@ export class BookingController {
   }
 
   @Get('property/:propertyId')
-  @ApiOperation({ summary: 'Всі бронювання об\'єкта (HOST-дашборд)' })
+  @ApiOperation({ summary: "Всі бронювання об'єкта (HOST-дашборд)" })
   @ApiParam({ name: 'propertyId' })
   @ApiResponse({ status: 200, type: [BookingResponseDto] })
   findByProperty(
@@ -97,14 +102,16 @@ export class BookingController {
   ): Promise<BookingResponseDto[]> {
     // Додаткова перевірка ролі (детальна перевірка — в сервісі)
     if (role !== 'HOST' && role !== 'ADMIN') {
-      throw new ForbiddenException('Тільки HOST може переглядати бронювання об\'єкта');
+      throw new ForbiddenException(
+        "Тільки HOST може переглядати бронювання об'єкта",
+      );
     }
     return this.bookingService.findByProperty(propertyId);
   }
 
   @Get(':id')
   @UseGuards(BookingAccessGuard)
-  @ApiOperation({ summary: 'Деталі бронювання (клієнт або HOST об\'єкта)' })
+  @ApiOperation({ summary: "Деталі бронювання (клієнт або HOST об'єкта)" })
   @ApiParam({ name: 'id' })
   @ApiResponse({ status: 200, type: BookingResponseDto })
   findOne(@Param('id') id: string): Promise<BookingResponseDto> {
@@ -138,7 +145,8 @@ export class BookingController {
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary: 'Скасувати бронювання',
-    description: 'Клієнт або HOST скасовують бронювання. Повернення передоплати визначається CancellationPolicy об\'єкта.',
+    description:
+      "Клієнт або HOST скасовують бронювання. Повернення передоплати визначається CancellationPolicy об'єкта.",
   })
   @ApiParam({ name: 'id' })
   @ApiResponse({ status: 200, type: BookingResponseDto })
@@ -146,8 +154,9 @@ export class BookingController {
     @Param('id') id: string,
     @CurrentUser('role') role: string,
   ): Promise<BookingResponseDto> {
-    const cancelledBy = role === 'ADMIN' ? 'ADMIN' : role === 'HOST' ? 'HOST' : 'CLIENT';
-    return this.bookingService.cancel(id, cancelledBy as 'CLIENT' | 'HOST' | 'ADMIN');
+    const cancelledBy =
+      role === 'ADMIN' ? 'ADMIN' : role === 'HOST' ? 'HOST' : 'CLIENT';
+    return this.bookingService.cancel(id, cancelledBy);
   }
 
   /**
@@ -160,7 +169,8 @@ export class BookingController {
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary: 'Позначити як завершене (HOST)',
-    description: 'Статус CONFIRMED → COMPLETED. Відкриває можливість для відгуку.',
+    description:
+      'Статус CONFIRMED → COMPLETED. Відкриває можливість для відгуку.',
   })
   @ApiParam({ name: 'id' })
   @ApiResponse({ status: 200, type: BookingResponseDto })

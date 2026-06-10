@@ -8,7 +8,7 @@ import {
   Matches,
 } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { CancellationPolicy } from '@prisma/client';
+import { CancellationPolicy } from '../../../prisma/generated/enums';
 
 export class CreatePropertyDto {
   @ApiProperty({ example: 'Глемпінг "Лісова Пісня"' })

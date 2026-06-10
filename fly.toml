@@ -10,7 +10,6 @@ primary_region = "iad"
 [env]
   NODE_ENV = "production"
   PORT = "3000"
-  DATABASE_URL="postgresql://zatyshok_user:supersecretpassword@localhost:5433/zatyshok?schema=public"
 
 
 [http_service]

@@ -18,7 +18,9 @@ export class CreateUnitDto {
   @MaxLength(100)
   name: string;
 
-  @ApiPropertyOptional({ example: 'Ідеально для романтичного вікенду на двох.' })
+  @ApiPropertyOptional({
+    example: 'Ідеально для романтичного вікенду на двох.',
+  })
   @IsOptional()
   @IsString()
   @MaxLength(1000)

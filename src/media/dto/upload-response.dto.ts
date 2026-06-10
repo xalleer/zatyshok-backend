@@ -1,7 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 export class UploadedFileDto {
-  @ApiProperty({ example: 'https://res.cloudinary.com/zatyshok/image/upload/v1/zatyshok/properties/abc123.webp' })
+  @ApiProperty({
+    example:
+      'https://res.cloudinary.com/zatyshok/image/upload/v1/zatyshok/properties/abc123.webp',
+  })
   url: string;
 
   @ApiProperty({ example: 'zatyshok/properties/abc123' })
@@ -13,7 +16,10 @@ export class UploadedFileDto {
   @ApiProperty({ example: 800 })
   height: number;
 
-  @ApiProperty({ example: 145032, description: 'Розмір у байтах після стиснення' })
+  @ApiProperty({
+    example: 145032,
+    description: 'Розмір у байтах після стиснення',
+  })
   bytes: number;
 }
 

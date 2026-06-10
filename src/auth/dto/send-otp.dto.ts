@@ -9,7 +9,8 @@ export class SendOtpDto {
   @IsString()
   @IsNotEmpty()
   @Matches(/^\+?[0-9]{10,15}$/, {
-    message: 'Phone number must be a valid international format (e.g., +380501234567)',
+    message:
+      'Phone number must be a valid international format (e.g., +380501234567)',
   })
   phone: string;
 }

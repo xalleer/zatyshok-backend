@@ -17,7 +17,10 @@ import {
 } from '@nestjs/swagger';
 import { ReviewService } from './review.service';
 import { CreateReviewDto } from './dto/create-review.dto';
-import { ReviewResponseDto, PropertyRatingDto } from './dto/review-response.dto';
+import {
+  ReviewResponseDto,
+  PropertyRatingDto,
+} from './dto/review-response.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { ReviewEligibilityGuard } from './guards/review-eligibility.guard';
 import { Public } from '../auth/decorators/public.decorator';
@@ -35,7 +38,7 @@ export class ReviewController {
    */
   @Get('properties/:propertyId/reviews')
   @Public()
-  @ApiOperation({ summary: 'Відгуки об\'єкта (публічний доступ)' })
+  @ApiOperation({ summary: "Відгуки об'єкта (публічний доступ)" })
   @ApiParam({ name: 'propertyId' })
   @ApiResponse({ status: 200, type: [ReviewResponseDto] })
   findByProperty(
@@ -51,7 +54,7 @@ export class ReviewController {
   @Get('properties/:propertyId/rating')
   @Public()
   @ApiOperation({
-    summary: 'Рейтинг об\'єкта (середнє + кількість відгуків)',
+    summary: "Рейтинг об'єкта (середнє + кількість відгуків)",
   })
   @ApiParam({ name: 'propertyId' })
   @ApiResponse({ status: 200, type: PropertyRatingDto })
@@ -73,7 +76,11 @@ export class ReviewController {
     summary: 'Отримати відгук для бронювання (або null якщо ще немає)',
   })
   @ApiParam({ name: 'bookingId' })
-  @ApiResponse({ status: 200, type: ReviewResponseDto, description: 'Відгук або null' })
+  @ApiResponse({
+    status: 200,
+    type: ReviewResponseDto,
+    description: 'Відгук або null',
+  })
   findByBooking(
     @Param('bookingId') bookingId: string,
   ): Promise<ReviewResponseDto | null> {
@@ -101,8 +108,14 @@ export class ReviewController {
   })
   @ApiParam({ name: 'bookingId' })
   @ApiResponse({ status: 201, type: ReviewResponseDto })
-  @ApiResponse({ status: 403, description: 'Бронювання не завершено або відгук вже є' })
-  @ApiResponse({ status: 409, description: 'Відгук для цього бронювання вже існує' })
+  @ApiResponse({
+    status: 403,
+    description: 'Бронювання не завершено або відгук вже є',
+  })
+  @ApiResponse({
+    status: 409,
+    description: 'Відгук для цього бронювання вже існує',
+  })
   create(
     @Param('bookingId') bookingId: string,
     @Body() dto: CreateReviewDto,

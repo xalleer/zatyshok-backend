@@ -10,7 +10,7 @@ import {
 } from './helpers/otp.helper';
 import { DEFAULT_USER_ROLE, JWT_EXPIRES_IN } from './auth.constants';
 import { InvalidOtpException } from './exceptions/auth.exceptions';
-import { Role } from '@prisma/client';
+import { Role } from '../../prisma/generated/enums';
 import { Telegraf } from 'telegraf';
 
 @Injectable()
@@ -39,7 +39,7 @@ export class AuthService {
       await this.bot.telegram.sendMessage(
         this.botChatId,
         `🔐 OTP код для ${phone}: <b>${otpCode}</b>\n\nДійсний ${expiry / 60} хв`,
-        { parse_mode: 'HTML' }
+        { parse_mode: 'HTML' },
       );
       this.logger.log(`OTP ${otpCode} sent to Telegram for ${phone}`);
     } catch (error) {

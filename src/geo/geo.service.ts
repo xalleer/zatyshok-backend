@@ -12,7 +12,9 @@ export class GeoService {
 
   // ─── Helpers ──────────────────────────────────────────────────────────────
 
-  private parseLocation(raw: unknown): { latitude: number; longitude: number } | null {
+  private parseLocation(
+    raw: unknown,
+  ): { latitude: number; longitude: number } | null {
     if (!raw || typeof raw !== 'string') return null;
     const match = raw.match(/POINT\(([+-]?\d+\.?\d*)\s([+-]?\d+\.?\d*)\)/);
     if (!match) return null;

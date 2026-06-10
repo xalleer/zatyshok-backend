@@ -30,11 +30,13 @@ export class PropertyOwnerGuard implements CanActivate {
     });
 
     if (!property) {
-      throw new NotFoundException('Об\'єкт не знайдено');
+      throw new NotFoundException("Об'єкт не знайдено");
     }
 
     if (property.hostId !== user.id) {
-      throw new ForbiddenException('Доступ заборонено: ви не є власником цього об\'єкта');
+      throw new ForbiddenException(
+        "Доступ заборонено: ви не є власником цього об'єкта",
+      );
     }
 
     return true;

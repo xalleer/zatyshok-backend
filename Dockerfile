@@ -1,20 +1,15 @@
-FROM node:22-alpine AS builder
-WORKDIR /app
+#build
+FROM node:24-alpine
+
+WORKDIR /usr/src/app
 COPY package*.json ./
-RUN npm ci
-COPY . .
-RUN npm run build
-
-FROM node:22-alpine
-WORKDIR /app
-COPY package*.json ./
-COPY prisma ./prisma
-
-RUN npm ci --only=production
-
+COPY prisma ./prisma/
+RUN npm install
 RUN npx prisma generate
+COPY . .
 
-COPY --from=builder /app/dist/src ./dist
-
+RUN npm run build
 EXPOSE 3000
-CMD ["npm", "run", "start:prod"]
+CMD ["node", "dist/main"]
+
+

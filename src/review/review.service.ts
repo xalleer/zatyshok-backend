@@ -1,15 +1,11 @@
-import {
-  Injectable,
-  NotFoundException,
-  Logger,
-} from '@nestjs/common';
+import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateReviewDto } from './dto/create-review.dto';
-import { ReviewResponseDto, PropertyRatingDto } from './dto/review-response.dto';
 import {
-  RATING_HIDE_THRESHOLD,
-  RATING_MIN_REVIEWS,
-} from './review.constants';
+  ReviewResponseDto,
+  PropertyRatingDto,
+} from './dto/review-response.dto';
+import { RATING_HIDE_THRESHOLD, RATING_MIN_REVIEWS } from './review.constants';
 
 @Injectable()
 export class ReviewService {
@@ -85,7 +81,7 @@ export class ReviewService {
     const property = await this.prisma.property.findUnique({
       where: { id: propertyId },
     });
-    if (!property) throw new NotFoundException('Об\'єкт не знайдено');
+    if (!property) throw new NotFoundException("Об'єкт не знайдено");
 
     const reviews = await this.prisma.review.findMany({
       where: { propertyId },
@@ -165,7 +161,7 @@ export class ReviewService {
       });
       this.logger.warn(
         `Об'єкт "${property.name}" (${propertyId}) приховано з пошуку. ` +
-        `Середній рейтинг: ${avg.toFixed(1)} (поріг: ${RATING_HIDE_THRESHOLD})`,
+          `Середній рейтинг: ${avg.toFixed(1)} (поріг: ${RATING_HIDE_THRESHOLD})`,
       );
     } else if (!shouldHide && !property.isActive) {
       await this.prisma.property.update({
@@ -174,7 +170,7 @@ export class ReviewService {
       });
       this.logger.log(
         `Об'єкт "${property.name}" (${propertyId}) відновлено у пошуку. ` +
-        `Середній рейтинг: ${avg.toFixed(1)}`,
+          `Середній рейтинг: ${avg.toFixed(1)}`,
       );
     }
   }

@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { BookingStatus, PaymentMethod } from '@prisma/client';
+import { BookingStatus, PaymentMethod } from '../../../prisma/generated/enums';
 
 export class BookingResponseDto {
   @ApiProperty() id: string;
@@ -14,7 +14,8 @@ export class BookingResponseDto {
   @ApiProperty({ enum: PaymentMethod }) paymentMethod: PaymentMethod;
 
   @ApiProperty({ description: 'Загальна сума у копійках' }) totalPrice: number;
-  @ApiPropertyOptional({ description: 'Сума передоплати у копійках' }) prepaymentAmount?: number | null;
+  @ApiPropertyOptional({ description: 'Сума передоплати у копійках' })
+  prepaymentAmount?: number | null;
 
   @ApiPropertyOptional() comment?: string | null;
 

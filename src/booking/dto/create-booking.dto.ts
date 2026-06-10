@@ -6,10 +6,13 @@ import {
   IsDateString,
 } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { PaymentMethod } from '@prisma/client';
+import { PaymentMethod } from '../../../prisma/generated/enums';
 
 export class CreateBookingDto {
-  @ApiProperty({ example: 'unit-uuid-here', description: 'ID юніта для бронювання' })
+  @ApiProperty({
+    example: 'unit-uuid-here',
+    description: 'ID юніта для бронювання',
+  })
   @IsString()
   @IsNotEmpty()
   unitId: string;

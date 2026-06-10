@@ -34,7 +34,7 @@ export class UnitOwnerGuard implements CanActivate {
 
     if (unit.property.hostId !== user.id) {
       throw new ForbiddenException(
-        'Доступ заборонено: ви не є власником цього об\'єкта',
+        "Доступ заборонено: ви не є власником цього об'єкта",
       );
     }
 

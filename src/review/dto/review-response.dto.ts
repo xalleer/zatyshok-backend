@@ -14,13 +14,13 @@ export class ReviewResponseDto {
   @ApiProperty() createdAt: Date;
 
   // Вкладені дані для відображення
-  @ApiPropertyOptional({ description: 'Ім\'я клієнта (якщо не анонімний)' })
+  @ApiPropertyOptional({ description: "Ім'я клієнта (якщо не анонімний)" })
   authorName?: string | null;
 
-  @ApiPropertyOptional({ description: 'Назва об\'єкта' })
+  @ApiPropertyOptional({ description: "Назва об'єкта" })
   propertyName?: string;
 
-  @ApiPropertyOptional({ description: 'Slug об\'єкта' })
+  @ApiPropertyOptional({ description: "Slug об'єкта" })
   propertySlug?: string;
 }
 

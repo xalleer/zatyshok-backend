@@ -21,12 +21,15 @@ import {
 import { UnitService } from './unit.service';
 import { CreateUnitDto } from './dto/create-unit.dto';
 import { UpdateUnitDto } from './dto/update-unit.dto';
-import { UnitResponseDto, UnitWithAvailabilityDto } from './dto/unit-response.dto';
+import {
+  UnitResponseDto,
+  UnitWithAvailabilityDto,
+} from './dto/unit-response.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { UnitOwnerGuard } from './guards/unit-owner.guard';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { Public } from '../auth/decorators/public.decorator';
-import { Role } from '@prisma/client';
+import { Role } from '../../prisma/generated/enums';
 
 @ApiTags('units')
 @Controller()
@@ -43,7 +46,7 @@ export class UnitController {
   @Get('properties/:propertyId/units')
   @Public()
   @ApiOperation({
-    summary: 'Список юнітів з доступністю (для публічної сторінки об\'єкта)',
+    summary: "Список юнітів з доступністю (для публічної сторінки об'єкта)",
   })
   @ApiParam({ name: 'propertyId' })
   @ApiResponse({ status: 200, type: [UnitWithAvailabilityDto] })
@@ -76,7 +79,7 @@ export class UnitController {
   @Post('properties/:propertyId/units')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Додати юніт до об\'єкта (тільки HOST-власник)' })
+  @ApiOperation({ summary: "Додати юніт до об'єкта (тільки HOST-власник)" })
   @ApiParam({ name: 'propertyId' })
   @ApiResponse({ status: 201, type: UnitResponseDto })
   create(

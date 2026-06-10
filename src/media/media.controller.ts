@@ -51,7 +51,7 @@ export class MediaController {
     }),
   )
   @ApiOperation({
-    summary: 'Завантажити фото для об\'єкта (до 10 файлів)',
+    summary: "Завантажити фото для об'єкта (до 10 файлів)",
     description: 'Файли конвертуються у WebP та стискаються автоматично.',
   })
   @ApiConsumes('multipart/form-data')
@@ -90,7 +90,7 @@ export class MediaController {
     }),
   )
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'Завантажити та встановити обкладинку об\'єкта' })
+  @ApiOperation({ summary: "Завантажити та встановити обкладинку об'єкта" })
   @ApiParam({ name: 'propertyId' })
   @ApiConsumes('multipart/form-data')
   @ApiBody({
@@ -101,7 +101,10 @@ export class MediaController {
       },
     },
   })
-  @ApiResponse({ status: 200, schema: { properties: { coverImage: { type: 'string' } } } })
+  @ApiResponse({
+    status: 200,
+    schema: { properties: { coverImage: { type: 'string' } } },
+  })
   setCover(
     @Param('propertyId') propertyId: string,
     @CurrentUser('id') hostId: string,
@@ -117,7 +120,7 @@ export class MediaController {
    */
   @Delete('properties/:propertyId/images')
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'Видалити фото об\'єкта' })
+  @ApiOperation({ summary: "Видалити фото об'єкта" })
   @ApiParam({ name: 'propertyId' })
   @ApiBody({
     schema: {
@@ -125,7 +128,10 @@ export class MediaController {
       properties: { imageUrl: { type: 'string' } },
     },
   })
-  @ApiResponse({ status: 200, schema: { properties: { message: { type: 'string' } } } })
+  @ApiResponse({
+    status: 200,
+    schema: { properties: { message: { type: 'string' } } },
+  })
   deletePropertyImage(
     @Param('propertyId') propertyId: string,
     @CurrentUser('id') hostId: string,
@@ -187,7 +193,10 @@ export class MediaController {
       properties: { imageUrl: { type: 'string' } },
     },
   })
-  @ApiResponse({ status: 200, schema: { properties: { message: { type: 'string' } } } })
+  @ApiResponse({
+    status: 200,
+    schema: { properties: { message: { type: 'string' } } },
+  })
   deleteUnitImage(
     @Param('unitId') unitId: string,
     @CurrentUser('id') hostId: string,

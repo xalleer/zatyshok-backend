@@ -57,9 +57,7 @@ export class UnitService {
     }
 
     if (property.hostId !== hostId) {
-      throw new ForbiddenException(
-        'Ви не є власником цієї бази відпочинку',
-      );
+      throw new ForbiddenException('Ви не є власником цієї бази відпочинку');
     }
   }
 
@@ -226,10 +224,7 @@ export class UnitService {
         // Перевірка перекриття діапазонів:
         // Бронювання конфліктує якщо checkIn < існуючий checkOut
         // І checkOut > існуючий checkIn
-        AND: [
-          { checkIn: { lt: checkOut } },
-          { checkOut: { gt: checkIn } },
-        ],
+        AND: [{ checkIn: { lt: checkOut } }, { checkOut: { gt: checkIn } }],
       },
     });
 

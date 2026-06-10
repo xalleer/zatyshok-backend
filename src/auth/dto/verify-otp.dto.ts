@@ -7,7 +7,7 @@ import {
   IsOptional,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { Role } from '@prisma/client';
+import { Role } from '../../../prisma/generated/enums';
 
 export class VerifyOtpDto {
   @ApiProperty({
@@ -17,7 +17,8 @@ export class VerifyOtpDto {
   @IsString()
   @IsNotEmpty()
   @Matches(/^\+?[0-9]{10,15}$/, {
-    message: 'Phone number must be a valid international format (e.g., +380501234567)',
+    message:
+      'Phone number must be a valid international format (e.g., +380501234567)',
   })
   phone: string;
 

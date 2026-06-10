@@ -36,7 +36,7 @@ export class MediaService {
     if (!ALLOWED_MIME_TYPES.includes(file.mimetype)) {
       throw new BadRequestException(
         `Непідтримуваний формат файлу: ${file.mimetype}. ` +
-        `Дозволено: ${ALLOWED_MIME_TYPES.join(', ')}`,
+          `Дозволено: ${ALLOWED_MIME_TYPES.join(', ')}`,
       );
     }
 
@@ -66,30 +66,43 @@ export class MediaService {
           folder,
           resource_type: 'image',
           format: 'webp',
-          transformation: [
-            { width: 1600, crop: 'limit' },
-            { quality: 80 },
-          ],
+          transformation: [{ width: 1600, crop: 'limit' }, { quality: 80 }],
         },
         (error, result) => {
           clearTimeout(timeoutId);
-          if (error?.message?.includes('timeout') || error?.name === 'TimeoutError') {
-            return reject(new BadRequestException('Час очікування завантаження вичерпано. Спробуйте файл меншого розміру або перевірте з\'єднання.'));
+          if (
+            error?.message?.includes('timeout') ||
+            error?.name === 'TimeoutError'
+          ) {
+            return reject(
+              new BadRequestException(
+                "Час очікування завантаження вичерпано. Спробуйте файл меншого розміру або перевірте з'єднання.",
+              ),
+            );
           }
-          if (error || !result) return reject(error ?? new Error('Cloudinary upload failed'));
+          if (error || !result)
+            return reject(error ?? new Error('Cloudinary upload failed'));
           resolve(result);
         },
       );
 
       timeoutId = setTimeout(() => {
         stream.destroy();
-        reject(new BadRequestException('Час очікування завантаження вичерпано (60 сек). Спробуйте файл меншого розміру.'));
+        reject(
+          new BadRequestException(
+            'Час очікування завантаження вичерпано (60 сек). Спробуйте файл меншого розміру.',
+          ),
+        );
       }, timeoutMs);
 
       stream.on('error', (err) => {
         clearTimeout(timeoutId);
         this.logger.error(`Cloudinary stream error: ${err.message}`, err.stack);
-        reject(new BadRequestException('Помилка завантаження файлу. Перевірте з\'єднання з інтернетом.'));
+        reject(
+          new BadRequestException(
+            "Помилка завантаження файлу. Перевірте з'єднання з інтернетом.",
+          ),
+        );
       });
 
       Readable.from(file.buffer).pipe(stream);
@@ -118,7 +131,9 @@ export class MediaService {
       files.map((f) => this.uploadToCloudinary(f, folder)),
     );
 
-    this.logger.log(`Завантажено ${results.length} файлів у Cloudinary (${folder})`);
+    this.logger.log(
+      `Завантажено ${results.length} файлів у Cloudinary (${folder})`,
+    );
 
     return { files: results.map((r) => this.formatResult(r)) };
   }
@@ -142,7 +157,7 @@ export class MediaService {
 
     if (!property) {
       throw new NotFoundException(
-        'Об\'єкт не знайдено або ви не є його власником',
+        "Об'єкт не знайдено або ви не є його власником",
       );
     }
 
@@ -180,13 +195,13 @@ export class MediaService {
 
     if (!property) {
       throw new NotFoundException(
-        'Об\'єкт не знайдено або ви не є його власником',
+        "Об'єкт не знайдено або ви не є його власником",
       );
     }
 
     if (!property.images.includes(imageUrl)) {
       throw new BadRequestException(
-        'Вказаний URL не знайдено серед фотографій цього об\'єкта',
+        "Вказаний URL не знайдено серед фотографій цього об'єкта",
       );
     }
 
@@ -213,14 +228,17 @@ export class MediaService {
 
     if (!property) {
       throw new NotFoundException(
-        'Об\'єкт не знайдено або ви не є його власником',
+        "Об'єкт не знайдено або ви не є його власником",
       );
     }
 
     this.validateFile(file);
 
     try {
-      const result = await this.uploadToCloudinary(file, CLOUDINARY_FOLDER.PROPERTY);
+      const result = await this.uploadToCloudinary(
+        file,
+        CLOUDINARY_FOLDER.PROPERTY,
+      );
       const imageUrl = result.secure_url;
 
       await this.prisma.property.update({
@@ -236,8 +254,13 @@ export class MediaService {
       if (error instanceof BadRequestException) {
         throw error;
       }
-      this.logger.error(`Cloudinary upload failed: ${error.message}`, error.stack);
-      throw new BadRequestException('Не вдалося завантажити файл. Сервіс тимчасово недоступний.');
+      this.logger.error(
+        `Cloudinary upload failed: ${error.message}`,
+        error.stack,
+      );
+      throw new BadRequestException(
+        'Не вдалося завантажити файл. Сервіс тимчасово недоступний.',
+      );
     }
   }
 
@@ -257,12 +280,12 @@ export class MediaService {
 
     if (!property) {
       throw new NotFoundException(
-        'Об\'єкт не знайдено або ви не є його власником',
+        "Об'єкт не знайдено або ви не є його власником",
       );
     }
 
     if (!property.images.includes(imageUrl)) {
-      throw new BadRequestException('Фото не знайдено в цьому об\'єкті');
+      throw new BadRequestException("Фото не знайдено в цьому об'єкті");
     }
 
     const updatedImages = property.images.filter((url) => url !== imageUrl);
@@ -300,7 +323,7 @@ export class MediaService {
 
     if (!unit) {
       throw new NotFoundException(
-        'Юніт не знайдено або ви не є власником об\'єкта',
+        "Юніт не знайдено або ви не є власником об'єкта",
       );
     }
 
@@ -330,7 +353,7 @@ export class MediaService {
 
     if (!unit) {
       throw new NotFoundException(
-        'Юніт не знайдено або ви не є власником об\'єкта',
+        "Юніт не знайдено або ви не є власником об'єкта",
       );
     }
 
@@ -361,7 +384,10 @@ export class MediaService {
       const publicId = match[1];
       await cloudinary.uploader.destroy(publicId);
     } catch (err) {
-      this.logger.warn(`Не вдалося видалити файл з Cloudinary: ${imageUrl}`, err);
+      this.logger.warn(
+        `Не вдалося видалити файл з Cloudinary: ${imageUrl}`,
+        err,
+      );
     }
   }
 }

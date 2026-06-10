@@ -4,7 +4,8 @@ import { ApiPropertyOptional } from '@nestjs/swagger';
 export class ConfirmBookingDto {
   @ApiPropertyOptional({
     example: 50000,
-    description: 'Розмір передоплати у копійках (якщо потрібна). 0 = без передоплати.',
+    description:
+      'Розмір передоплати у копійках (якщо потрібна). 0 = без передоплати.',
   })
   @IsOptional()
   @IsInt()

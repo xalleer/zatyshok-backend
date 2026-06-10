@@ -14,7 +14,11 @@ import Redis from 'ioredis';
 import { CreateBookingDto } from './dto/create-booking.dto';
 import { ConfirmBookingDto } from './dto/confirm-booking.dto';
 import { BookingResponseDto } from './dto/booking-response.dto';
-import { BookingStatus, CancellationPolicy, PaymentMethod } from '@prisma/client';
+import {
+  BookingStatus,
+  CancellationPolicy,
+  PaymentMethod,
+} from '../../prisma/generated/enums';
 import { format, differenceInDays, addHours } from 'date-fns';
 import {
   HOLD_TTL_SECONDS,
@@ -39,7 +43,10 @@ export class BookingService {
     return `${HOLD_REDIS_PREFIX}${bookingId}`;
   }
 
-  private formatBooking(booking: any, holdExpiresIn?: number | null): BookingResponseDto {
+  private formatBooking(
+    booking: any,
+    holdExpiresIn?: number | null,
+  ): BookingResponseDto {
     const checkIn = new Date(booking.checkIn);
     const checkOut = new Date(booking.checkOut);
     const nights = Math.max(1, differenceInDays(checkOut, checkIn));
@@ -68,7 +75,11 @@ export class BookingService {
 
   // ─── Розрахунок суми ──────────────────────────────────────────────────────
 
-  private calculateTotal(pricePerNight: number, checkIn: Date, checkOut: Date): number {
+  private calculateTotal(
+    pricePerNight: number,
+    checkIn: Date,
+    checkOut: Date,
+  ): number {
     const nights = Math.max(1, differenceInDays(checkOut, checkIn));
     return pricePerNight * nights;
   }
@@ -87,8 +98,10 @@ export class BookingService {
     bookingCreatedAt: Date,
     now = new Date(),
   ): boolean {
-    const hoursToCheckIn = (checkIn.getTime() - now.getTime()) / (1000 * 60 * 60);
-    const hoursSinceBooking = (now.getTime() - bookingCreatedAt.getTime()) / (1000 * 60 * 60);
+    const hoursToCheckIn =
+      (checkIn.getTime() - now.getTime()) / (1000 * 60 * 60);
+    const hoursSinceBooking =
+      (now.getTime() - bookingCreatedAt.getTime()) / (1000 * 60 * 60);
     const daysToCheckIn = hoursToCheckIn / 24;
 
     if (policy === CancellationPolicy.FLEXIBLE) {
@@ -157,13 +170,18 @@ export class BookingService {
         data: { status: BookingStatus.CANCELLED },
       });
 
-      this.logger.log(`HOLD cleanup: скасовано ${expiredIds.length} бронювань: ${expiredIds.join(', ')}`);
+      this.logger.log(
+        `HOLD cleanup: скасовано ${expiredIds.length} бронювань: ${expiredIds.join(', ')}`,
+      );
     }
   }
 
   // ─── CREATE: Instant booking зі статусом HOLD ────────────────────────────
 
-  async create(userId: string, dto: CreateBookingDto): Promise<BookingResponseDto> {
+  async create(
+    userId: string,
+    dto: CreateBookingDto,
+  ): Promise<BookingResponseDto> {
     const checkIn = new Date(dto.checkIn);
     const checkOut = new Date(dto.checkOut);
 
@@ -183,7 +201,9 @@ export class BookingService {
 
     if (!unit) throw new NotFoundException('Юніт не знайдено');
     if (!unit.property.isActive) {
-      throw new BadRequestException('Цей об\'єкт наразі недоступний для бронювання');
+      throw new BadRequestException(
+        "Цей об'єкт наразі недоступний для бронювання",
+      );
     }
 
     // Перевірка доступності через UnitService
@@ -227,7 +247,10 @@ export class BookingService {
 
   // ─── CONFIRM: HOST підтверджує бронювання ────────────────────────────────
 
-  async confirm(bookingId: string, dto: ConfirmBookingDto): Promise<BookingResponseDto> {
+  async confirm(
+    bookingId: string,
+    dto: ConfirmBookingDto,
+  ): Promise<BookingResponseDto> {
     const booking = await this.prisma.booking.findUnique({
       where: { id: bookingId },
       include: {
@@ -237,7 +260,10 @@ export class BookingService {
 
     if (!booking) throw new NotFoundException('Бронювання не знайдено');
 
-    if (booking.status !== BookingStatus.HOLD && booking.status !== BookingStatus.PENDING) {
+    if (
+      booking.status !== BookingStatus.HOLD &&
+      booking.status !== BookingStatus.PENDING
+    ) {
       throw new BadRequestException(
         `Неможливо підтвердити бронювання зі статусом ${booking.status}`,
       );
@@ -264,7 +290,10 @@ export class BookingService {
 
   // ─── CANCEL: Скасування клієнтом або хостом ──────────────────────────────
 
-  async cancel(bookingId: string, cancelledBy: 'CLIENT' | 'HOST' | 'ADMIN'): Promise<BookingResponseDto> {
+  async cancel(
+    bookingId: string,
+    cancelledBy: 'CLIENT' | 'HOST' | 'ADMIN',
+  ): Promise<BookingResponseDto> {
     const booking = await this.prisma.booking.findUnique({
       where: { id: bookingId },
       include: {
@@ -294,11 +323,9 @@ export class BookingService {
 
     // Визначаємо можливість повернення передоплати
     const policy = booking.unit.property.policy;
-    const refundable = cancelledBy !== 'HOST' && this.canRefund(
-      policy,
-      booking.checkIn,
-      booking.createdAt,
-    );
+    const refundable =
+      cancelledBy !== 'HOST' &&
+      this.canRefund(policy, booking.checkIn, booking.createdAt);
 
     const updated = await this.prisma.booking.update({
       where: { id: bookingId },
@@ -361,9 +388,10 @@ export class BookingService {
 
     if (!booking) throw new NotFoundException('Бронювання не знайдено');
 
-    const holdTtl = booking.status === BookingStatus.HOLD
-      ? await this.getHoldTtl(bookingId)
-      : null;
+    const holdTtl =
+      booking.status === BookingStatus.HOLD
+        ? await this.getHoldTtl(bookingId)
+        : null;
 
     return this.formatBooking(booking, holdTtl);
   }
@@ -380,9 +408,8 @@ export class BookingService {
 
     return Promise.all(
       bookings.map(async (b) => {
-        const holdTtl = b.status === BookingStatus.HOLD
-          ? await this.getHoldTtl(b.id)
-          : null;
+        const holdTtl =
+          b.status === BookingStatus.HOLD ? await this.getHoldTtl(b.id) : null;
         return this.formatBooking(b, holdTtl);
       }),
     );
@@ -402,9 +429,8 @@ export class BookingService {
 
     return Promise.all(
       bookings.map(async (b) => {
-        const holdTtl = b.status === BookingStatus.HOLD
-          ? await this.getHoldTtl(b.id)
-          : null;
+        const holdTtl =
+          b.status === BookingStatus.HOLD ? await this.getHoldTtl(b.id) : null;
         return this.formatBooking(b, holdTtl);
       }),
     );
@@ -418,7 +444,9 @@ export class BookingService {
     // Перевіряємо що HOST дійсно є власником цього юніта
     const unit = await this.prisma.unit.findUnique({
       where: { id: dto.unitId },
-      include: { property: { select: { hostId: true, name: true, slug: true } } },
+      include: {
+        property: { select: { hostId: true, name: true, slug: true } },
+      },
     });
 
     if (!unit) throw new NotFoundException('Юніт не знайдено');
@@ -433,7 +461,11 @@ export class BookingService {
       throw new BadRequestException('checkOut має бути пізніше checkIn');
     }
 
-    const isAvailable = await this.unitService.checkAvailability(dto.unitId, checkIn, checkOut);
+    const isAvailable = await this.unitService.checkAvailability(
+      dto.unitId,
+      checkIn,
+      checkOut,
+    );
     if (!isAvailable) {
       throw new ConflictException('Ці дати вже заброньовані');
     }

@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { CancellationPolicy } from '@prisma/client';
+import { CancellationPolicy } from '../../../prisma/generated/enums';
 
 export class PropertyResponseDto {
   @ApiProperty() id: string;

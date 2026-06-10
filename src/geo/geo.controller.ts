@@ -1,10 +1,5 @@
 import { Controller, Get, Query } from '@nestjs/common';
-import {
-  ApiTags,
-  ApiOperation,
-  ApiResponse,
-  ApiQuery,
-} from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiQuery } from '@nestjs/swagger';
 import { GeoService } from './geo.service';
 import { NearbyQueryDto } from './dto/nearby-query.dto';
 import { NearbyPropertyDto } from './dto/nearby-result.dto';
@@ -50,11 +45,34 @@ export class GeoController {
     description:
       'Мінімальні дані для відображення маркерів на карті. Приймає bbox поточного вигляду.',
   })
-  @ApiQuery({ name: 'swLat', required: false, type: Number, description: 'Кут SW (широта)' })
-  @ApiQuery({ name: 'swLng', required: false, type: Number, description: 'Кут SW (довгота)' })
-  @ApiQuery({ name: 'neLat', required: false, type: Number, description: 'Кут NE (широта)' })
-  @ApiQuery({ name: 'neLng', required: false, type: Number, description: 'Кут NE (довгота)' })
-  @ApiResponse({ status: 200, description: 'Масив пінів з координатами і мін. ціною' })
+  @ApiQuery({
+    name: 'swLat',
+    required: false,
+    type: Number,
+    description: 'Кут SW (широта)',
+  })
+  @ApiQuery({
+    name: 'swLng',
+    required: false,
+    type: Number,
+    description: 'Кут SW (довгота)',
+  })
+  @ApiQuery({
+    name: 'neLat',
+    required: false,
+    type: Number,
+    description: 'Кут NE (широта)',
+  })
+  @ApiQuery({
+    name: 'neLng',
+    required: false,
+    type: Number,
+    description: 'Кут NE (довгота)',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Масив пінів з координатами і мін. ціною',
+  })
   getMapPins(
     @Query('swLat') swLat?: string,
     @Query('swLng') swLng?: string,
@@ -66,11 +84,11 @@ export class GeoController {
     return this.geoService.getMapPins(
       hasBbox
         ? {
-          swLat: parseFloat(swLat),
-          swLng: parseFloat(swLng),
-          neLat: parseFloat(neLat),
-          neLng: parseFloat(neLng),
-        }
+            swLat: parseFloat(swLat),
+            swLng: parseFloat(swLng),
+            neLat: parseFloat(neLat),
+            neLng: parseFloat(neLng),
+          }
         : undefined,
     );
   }

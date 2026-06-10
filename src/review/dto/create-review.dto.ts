@@ -1,4 +1,11 @@
-import { IsInt, IsOptional, IsString, Min, Max, MaxLength } from 'class-validator';
+import {
+  IsInt,
+  IsOptional,
+  IsString,
+  Min,
+  Max,
+  MaxLength,
+} from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { MIN_RATING, MAX_RATING } from '../review.constants';
 
@@ -15,8 +22,8 @@ export class CreateReviewDto {
   rating: number;
 
   @ApiPropertyOptional({
-    example: 'Чудове місце, обов\'язково повернемося!',
-    description: 'Текстовий коментар (необов\'язковий)',
+    example: "Чудове місце, обов'язково повернемося!",
+    description: "Текстовий коментар (необов'язковий)",
   })
   @IsOptional()
   @IsString()

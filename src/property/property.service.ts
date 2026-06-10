@@ -42,7 +42,6 @@ export class PropertyService {
     }
   }
 
-
   private parseLocation(
     raw: unknown,
   ): { latitude: number; longitude: number } | null {
