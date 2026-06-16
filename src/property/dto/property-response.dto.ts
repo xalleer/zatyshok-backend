@@ -1,5 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { CancellationPolicy } from '../../../prisma/generated/enums';
+import { CancellationPolicy, PropertyStatus } from '../../../prisma/generated/enums';
+import { UnitResponseDto } from '../../unit/dto/unit-response.dto';
 
 export class PropertyResponseDto {
   @ApiProperty() id: string;
@@ -13,10 +14,12 @@ export class PropertyResponseDto {
   @ApiPropertyOptional() latitude?: number | null;
   @ApiPropertyOptional() longitude?: number | null;
   @ApiProperty({ enum: CancellationPolicy }) policy: CancellationPolicy;
+  @ApiProperty({ enum: PropertyStatus }) status: PropertyStatus;
   @ApiProperty() isActive: boolean;
   @ApiProperty() hostId: string;
   @ApiProperty() createdAt: Date;
   @ApiProperty() updatedAt: Date;
+  @ApiProperty({ type: [UnitResponseDto] }) units: UnitResponseDto[];
 
   // Агреговані поля з відгуків
   @ApiPropertyOptional({ description: 'Середній рейтинг (1–5)' })

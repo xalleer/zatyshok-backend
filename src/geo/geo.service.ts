@@ -35,10 +35,12 @@ export class GeoService {
       latitude: coords?.latitude ?? null,
       longitude: coords?.longitude ?? null,
       policy: row.policy,
-      isActive: row.isActive,
+      status: row.status,
+      isActive: row.status === 'ACTIVE',
       hostId: row.hostId,
       createdAt: row.createdAt,
       updatedAt: row.updatedAt,
+      units: [],
       rating: row.rating ? parseFloat(row.rating) : null,
       reviewCount: parseInt(row.reviewCount ?? '0'),
       // Відстань від запитуваної точки, округлена до 0.1 км
@@ -64,6 +66,13 @@ export class GeoService {
     const rows = await this.prisma.$queryRaw<any[]>`
       SELECT
         p.*,
+        (
+          SELECT i.url
+          FROM "Image" i
+          WHERE i."propertyId" = p.id
+          ORDER BY i."sortOrder" ASC, i."createdAt" ASC
+          LIMIT 1
+        )                                                           AS "coverImage",
         ST_AsText(p.location)                                       AS location,
         ST_Distance(
           p.location::geography,
@@ -74,7 +83,7 @@ export class GeoService {
       FROM "Property" p
       LEFT JOIN "Review" r ON r."propertyId" = p.id
       WHERE
-        p."isActive" = true
+        p.status = 'ACTIVE'
         AND p.location IS NOT NULL
         AND ST_DWithin(
           p.location::geography,
@@ -118,14 +127,20 @@ export class GeoService {
           p.id,
           p.slug,
           p.name,
-          p."coverImage",
+          (
+            SELECT i.url
+            FROM "Image" i
+            WHERE i."propertyId" = p.id
+            ORDER BY i."sortOrder" ASC, i."createdAt" ASC
+            LIMIT 1
+          )                      AS "coverImage",
           ST_Y(p.location::geometry) AS latitude,
           ST_X(p.location::geometry) AS longitude,
           MIN(u.price)               AS min_price
         FROM "Property" p
         LEFT JOIN "Unit" u ON u."propertyId" = p.id
         WHERE
-          p."isActive" = true
+          p.status = 'ACTIVE'
           AND p.location IS NOT NULL
           AND ST_Within(
             p.location::geometry,
@@ -141,14 +156,20 @@ export class GeoService {
           p.id,
           p.slug,
           p.name,
-          p."coverImage",
+          (
+            SELECT i.url
+            FROM "Image" i
+            WHERE i."propertyId" = p.id
+            ORDER BY i."sortOrder" ASC, i."createdAt" ASC
+            LIMIT 1
+          )                      AS "coverImage",
           ST_Y(p.location::geometry) AS latitude,
           ST_X(p.location::geometry) AS longitude,
           MIN(u.price)               AS min_price
         FROM "Property" p
         LEFT JOIN "Unit" u ON u."propertyId" = p.id
         WHERE
-          p."isActive" = true
+          p.status = 'ACTIVE'
           AND p.location IS NOT NULL
         GROUP BY p.id
       `;

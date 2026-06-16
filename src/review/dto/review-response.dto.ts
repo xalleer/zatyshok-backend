@@ -2,7 +2,7 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class ReviewResponseDto {
   @ApiProperty() id: string;
-  @ApiProperty() bookingId: string;
+  @ApiPropertyOptional() bookingId?: string | null;
   @ApiProperty() propertyId: string;
 
   @ApiProperty({ example: 5, description: 'Рейтинг від 1 до 5' })

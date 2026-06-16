@@ -153,6 +153,7 @@ export class MediaService {
   ): Promise<UploadResponseDto> {
     const property = await this.prisma.property.findFirst({
       where: { id: propertyId, hostId },
+      include: { images: { orderBy: { sortOrder: 'asc' } } },
     });
 
     if (!property) {
@@ -167,14 +168,14 @@ export class MediaService {
     );
 
     const newUrls = uploaded.map((f) => f.url);
+    const startOrder = property.images.length;
 
-    await this.prisma.property.update({
-      where: { id: propertyId },
-      data: {
-        images: { push: newUrls },
-        // Встановлюємо coverImage якщо ще немає
-        ...(!property.coverImage && { coverImage: newUrls[0] }),
-      },
+    await this.prisma.image.createMany({
+      data: newUrls.map((url, index) => ({
+        url,
+        propertyId,
+        sortOrder: startOrder + index,
+      })),
     });
 
     return { files: uploaded };
@@ -191,6 +192,7 @@ export class MediaService {
   ): Promise<{ coverImage: string }> {
     const property = await this.prisma.property.findFirst({
       where: { id: propertyId, hostId },
+      include: { images: { orderBy: { sortOrder: 'asc' } } },
     });
 
     if (!property) {
@@ -199,15 +201,16 @@ export class MediaService {
       );
     }
 
-    if (!property.images.includes(imageUrl)) {
+    const image = property.images.find((item) => item.url === imageUrl);
+    if (!image) {
       throw new BadRequestException(
         "Вказаний URL не знайдено серед фотографій цього об'єкта",
       );
     }
 
-    await this.prisma.property.update({
-      where: { id: propertyId },
-      data: { coverImage: imageUrl },
+    await this.prisma.image.update({
+      where: { id: image.id },
+      data: { sortOrder: 0 },
     });
 
     return { coverImage: imageUrl };
@@ -224,6 +227,7 @@ export class MediaService {
   ): Promise<{ coverImage: string }> {
     const property = await this.prisma.property.findFirst({
       where: { id: propertyId, hostId },
+      include: { images: true },
     });
 
     if (!property) {
@@ -241,11 +245,11 @@ export class MediaService {
       );
       const imageUrl = result.secure_url;
 
-      await this.prisma.property.update({
-        where: { id: propertyId },
+      await this.prisma.image.create({
         data: {
-          images: { push: imageUrl },
-          coverImage: imageUrl,
+          url: imageUrl,
+          propertyId,
+          sortOrder: 0,
         },
       });
 
@@ -276,6 +280,7 @@ export class MediaService {
   ): Promise<{ message: string }> {
     const property = await this.prisma.property.findFirst({
       where: { id: propertyId, hostId },
+      include: { images: true },
     });
 
     if (!property) {
@@ -284,22 +289,12 @@ export class MediaService {
       );
     }
 
-    if (!property.images.includes(imageUrl)) {
+    const image = property.images.find((item) => item.url === imageUrl);
+    if (!image) {
       throw new BadRequestException("Фото не знайдено в цьому об'єкті");
     }
 
-    const updatedImages = property.images.filter((url) => url !== imageUrl);
-
-    // Якщо видалили обкладинку — призначаємо нову
-    const newCover =
-      property.coverImage === imageUrl
-        ? (updatedImages[0] ?? null)
-        : property.coverImage;
-
-    await this.prisma.property.update({
-      where: { id: propertyId },
-      data: { images: updatedImages, coverImage: newCover },
-    });
+    await this.prisma.image.delete({ where: { id: image.id } });
 
     // Видаляємо з Cloudinary (best-effort — не кидаємо помилку якщо не вдалося)
     await this.deleteFromCloudinary(imageUrl);
@@ -319,6 +314,7 @@ export class MediaService {
         id: unitId,
         property: { hostId },
       },
+      include: { images: { orderBy: { sortOrder: 'asc' } } },
     });
 
     if (!unit) {
@@ -333,10 +329,14 @@ export class MediaService {
     );
 
     const newUrls = uploaded.map((f) => f.url);
+    const startOrder = unit.images.length;
 
-    await this.prisma.unit.update({
-      where: { id: unitId },
-      data: { images: { push: newUrls } },
+    await this.prisma.image.createMany({
+      data: newUrls.map((url, index) => ({
+        url,
+        unitId,
+        sortOrder: startOrder + index,
+      })),
     });
 
     return { files: uploaded };
@@ -349,6 +349,7 @@ export class MediaService {
   ): Promise<{ message: string }> {
     const unit = await this.prisma.unit.findFirst({
       where: { id: unitId, property: { hostId } },
+      include: { images: true },
     });
 
     if (!unit) {
@@ -357,14 +358,12 @@ export class MediaService {
       );
     }
 
-    if (!unit.images.includes(imageUrl)) {
+    const image = unit.images.find((item) => item.url === imageUrl);
+    if (!image) {
       throw new BadRequestException('Фото не знайдено в цьому юніті');
     }
 
-    await this.prisma.unit.update({
-      where: { id: unitId },
-      data: { images: unit.images.filter((url) => url !== imageUrl) },
-    });
+    await this.prisma.image.delete({ where: { id: image.id } });
 
     await this.deleteFromCloudinary(imageUrl);
 

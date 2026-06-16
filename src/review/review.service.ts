@@ -5,6 +5,7 @@ import {
   ReviewResponseDto,
   PropertyRatingDto,
 } from './dto/review-response.dto';
+import { PropertyStatus } from '../../prisma/generated/enums';
 import { RATING_HIDE_THRESHOLD, RATING_MIN_REVIEWS } from './review.constants';
 
 @Injectable()
@@ -15,15 +16,18 @@ export class ReviewService {
 
   // ─── Helpers ──────────────────────────────────────────────────────────────
 
-  private formatReview(review: any): ReviewResponseDto {
+  private formatReview(
+    review: any,
+    bookingId: string | null = null,
+  ): ReviewResponseDto {
     return {
       id: review.id,
-      bookingId: review.bookingId,
+      bookingId,
       propertyId: review.propertyId,
       rating: review.rating,
       comment: review.comment ?? null,
       createdAt: review.createdAt,
-      authorName: review.booking?.user?.name ?? null,
+      authorName: review.user?.name ?? null,
       propertyName: review.property?.name,
       propertySlug: review.property?.slug,
     };
@@ -58,11 +62,11 @@ export class ReviewService {
       data: {
         rating: dto.rating,
         comment: dto.comment,
-        bookingId,
+        userId: booking.userId,
         propertyId,
       },
       include: {
-        booking: { include: { user: { select: { name: true } } } },
+        user: { select: { name: true } },
         property: { select: { name: true, slug: true } },
       },
     });
@@ -71,7 +75,7 @@ export class ReviewService {
     // та потенційно приховуємо об'єкт
     await this.recalculateAndGuardRating(propertyId);
 
-    return this.formatReview(review);
+    return this.formatReview(review, bookingId);
   }
 
   // ─── READ ─────────────────────────────────────────────────────────────────
@@ -86,7 +90,7 @@ export class ReviewService {
     const reviews = await this.prisma.review.findMany({
       where: { propertyId },
       include: {
-        booking: { include: { user: { select: { name: true } } } },
+        user: { select: { name: true } },
         property: { select: { name: true, slug: true } },
       },
       orderBy: { createdAt: 'desc' },
@@ -113,15 +117,25 @@ export class ReviewService {
 
   /** Відгук для конкретного бронювання (клієнт перевіряє чи вже залишив) */
   async findByBooking(bookingId: string): Promise<ReviewResponseDto | null> {
-    const review = await this.prisma.review.findUnique({
-      where: { bookingId },
+    const booking = await this.prisma.booking.findUnique({
+      where: { id: bookingId },
+      include: { unit: { select: { propertyId: true } } },
+    });
+
+    if (!booking) return null;
+
+    const review = await this.prisma.review.findFirst({
+      where: {
+        userId: booking.userId,
+        propertyId: booking.unit.propertyId,
+      },
       include: {
-        booking: { include: { user: { select: { name: true } } } },
+        user: { select: { name: true } },
         property: { select: { name: true, slug: true } },
       },
     });
 
-    return review ? this.formatReview(review) : null;
+    return review ? this.formatReview(review, bookingId) : null;
   }
 
   // ─── Rating guard logic ───────────────────────────────────────────────────
@@ -148,25 +162,25 @@ export class ReviewService {
 
     const property = await this.prisma.property.findUnique({
       where: { id: propertyId },
-      select: { isActive: true, name: true },
+      select: { status: true, name: true },
     });
 
     if (!property) return;
 
     // Змінюємо isActive лише якщо стан відрізняється від поточного
-    if (shouldHide && property.isActive) {
+    if (shouldHide && property.status === PropertyStatus.ACTIVE) {
       await this.prisma.property.update({
         where: { id: propertyId },
-        data: { isActive: false },
+        data: { status: PropertyStatus.BLOCKED },
       });
       this.logger.warn(
         `Об'єкт "${property.name}" (${propertyId}) приховано з пошуку. ` +
           `Середній рейтинг: ${avg.toFixed(1)} (поріг: ${RATING_HIDE_THRESHOLD})`,
       );
-    } else if (!shouldHide && !property.isActive) {
+    } else if (!shouldHide && property.status === PropertyStatus.BLOCKED) {
       await this.prisma.property.update({
         where: { id: propertyId },
-        data: { isActive: true },
+        data: { status: PropertyStatus.ACTIVE },
       });
       this.logger.log(
         `Об'єкт "${property.name}" (${propertyId}) відновлено у пошуку. ` +

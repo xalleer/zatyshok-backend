@@ -7,6 +7,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { CreatePropertyDto } from './dto/create-property.dto';
 import { UpdatePropertyDto } from './dto/update-property.dto';
 import { PropertyResponseDto } from './dto/property-response.dto';
+import { PropertyStatus } from '../../prisma/generated/enums';
 import {
   PaginationDto,
   PaginatedResponseDto,
@@ -54,17 +55,25 @@ export class PropertyService {
 // В formatProperty додаємо units:
   private formatProperty(property: any, aggregates?: { rating: number | null; reviewCount: number }): PropertyResponseDto {
     const coords = this.parseLocation(property.location);
+    const images = Array.isArray(property.images)
+      ? property.images.map((image: any) =>
+          typeof image === 'string' ? image : image.url,
+        )
+      : [];
     return {
       id: property.id,
       name: property.name,
       slug: property.slug,
       description: property.description,
-      images: property.images ?? [],       // тепер Image[]
+      coverImage: images[0] ?? null,
+      images,
       city: property.city,
       address: property.address,
       latitude: coords?.latitude ?? null,
       longitude: coords?.longitude ?? null,
       policy: property.policy,
+      status: property.status,
+      isActive: property.status === PropertyStatus.ACTIVE,
       hostId: property.hostId,
       createdAt: property.createdAt,
       updatedAt: property.updatedAt,
@@ -125,6 +134,7 @@ export class PropertyService {
         city: dto.city,
         address: dto.address,
         policy: dto.policy,
+        categoryId: dto.categoryId,
         hostId,
       },
     });
@@ -260,7 +270,10 @@ export class PropertyService {
         ...(dto.city !== undefined && { city: dto.city }),
         ...(dto.address !== undefined && { address: dto.address }),
         ...(dto.policy && { policy: dto.policy }),
-        ...(dto.isActive !== undefined && { isActive: dto.isActive }),
+        ...(dto.categoryId && { categoryId: dto.categoryId }),
+        ...(dto.isActive !== undefined && {
+          status: dto.isActive ? PropertyStatus.ACTIVE : PropertyStatus.DRAFT,
+        }),
       },
     });
 

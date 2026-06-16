@@ -33,7 +33,7 @@ export class ReviewEligibilityGuard implements CanActivate {
 
     const booking = await this.prisma.booking.findUnique({
       where: { id: bookingId },
-      include: { review: true },
+      include: { unit: { select: { propertyId: true } } },
     });
 
     if (!booking) {
@@ -53,7 +53,14 @@ export class ReviewEligibilityGuard implements CanActivate {
     }
 
     // Захист від дублювання
-    if (booking.review) {
+    const existingReview = await this.prisma.review.findFirst({
+      where: {
+        userId: booking.userId,
+        propertyId: booking.unit.propertyId,
+      },
+    });
+
+    if (existingReview) {
       throw new ConflictException(
         'Ви вже залишили відгук для цього бронювання',
       );

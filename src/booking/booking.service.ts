@@ -18,6 +18,7 @@ import {
   BookingStatus,
   CancellationPolicy,
   PaymentMethod,
+  PropertyStatus,
 } from '../../prisma/generated/enums';
 import { format, differenceInDays, addHours } from 'date-fns';
 import {
@@ -196,11 +197,11 @@ export class BookingService {
     // Отримуємо юніт з ціною та інфо про property
     const unit = await this.prisma.unit.findUnique({
       where: { id: dto.unitId },
-      include: { property: { select: { id: true, isActive: true } } },
+      include: { property: { select: { id: true, status: true } } },
     });
 
     if (!unit) throw new NotFoundException('Юніт не знайдено');
-    if (!unit.property.isActive) {
+    if (unit.property.status !== PropertyStatus.ACTIVE) {
       throw new BadRequestException(
         "Цей об'єкт наразі недоступний для бронювання",
       );

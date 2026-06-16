@@ -29,6 +29,11 @@ export class CreatePropertyDto {
   @MaxLength(60)
   slug: string;
 
+  @ApiProperty({ description: 'ID категорії об\'єкта' })
+  @IsString()
+  @IsNotEmpty()
+  categoryId: string;
+
   @ApiPropertyOptional({ example: 'Затишні куполи в сосновому лісі.' })
   @IsOptional()
   @IsString()

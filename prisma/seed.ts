@@ -8,38 +8,75 @@ const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
 
 async function main() {
-  console.log('🌱 Починаємо seeding бази даних...');
+  console.log('Starting database seed...');
 
   await prisma.user.deleteMany();
 
   const host = await prisma.user.create({
     data: {
       phone: '+380501112233',
-      name: 'Олег (Власник)',
+      name: 'Oleh (Host)',
       role: 'HOST',
     },
   });
 
-  const client = await prisma.user.create({
+  await prisma.user.create({
     data: {
       phone: '+380679998877',
-      name: 'Анна (Клієнт)',
+      name: 'Anna (Client)',
       role: 'CLIENT',
     },
   });
 
+  const propertyCategory = await prisma.propertyCategory.create({
+    data: { name: 'Glamping', slug: 'glamping' },
+  });
+
+  const unitCategory = await prisma.unitCategory.create({
+    data: { name: 'Dome', slug: 'dome' },
+  });
+
+  const featureNames = [
+    'WiFi',
+    'Air conditioner',
+    'Hot tub',
+    'Double bed',
+    'Fireplace',
+    'Terrace',
+    'Grill',
+  ];
+
+  const features = await Promise.all(
+    featureNames.map((name) =>
+      prisma.feature.create({
+        data: {
+          name,
+          slug: name.toLowerCase().replaceAll(' ', '-'),
+        },
+      }),
+    ),
+  );
+  const featureByName = new Map(features.map((feature) => [feature.name, feature.id]));
+
   const property = await prisma.property.create({
     data: {
-      name: 'Глемпінг "Лісова Пісня"',
+      name: 'Lisova Pisnya Glamping',
       slug: 'lisova-pisnya',
-      description: 'Затишні куполи в сосновому лісі з панорамними вікнами.',
-      city: 'Полтава',
-      address: 'вул. Соснова, 1',
+      description: 'Cozy domes in a pine forest with panoramic windows.',
+      city: 'Poltava',
+      address: 'Sosnova St, 1',
       hostId: host.id,
+      categoryId: propertyCategory.id,
       policy: 'FLEXIBLE',
-      images: [
-        'https://res.cloudinary.com/demo/image/upload/sample.jpg', // Тестові лінки
-      ],
+      status: 'ACTIVE',
+      images: {
+        create: [
+          {
+            url: 'https://res.cloudinary.com/demo/image/upload/sample.jpg',
+            sortOrder: 0,
+          },
+        ],
+      },
     },
   });
 
@@ -49,33 +86,44 @@ async function main() {
     WHERE id = ${property.id};
   `;
 
-  await prisma.unit.createMany({
-    data: [
-      {
-        propertyId: property.id,
-        name: 'Купол "Світанок"',
-        description: 'Ідеально для романтичного вікенду на двох.',
-        price: 250000, // 2500 грн (в копійках)
-        capacity: 2,
-        features: ['WiFi', 'Кондиціонер', 'Чан', 'Двоспальне ліжко'],
+  await prisma.unit.create({
+    data: {
+      propertyId: property.id,
+      categoryId: unitCategory.id,
+      name: 'Dome "Svitanok"',
+      description: 'Ideal for a romantic weekend for two.',
+      price: 250000,
+      capacity: 2,
+      features: {
+        connect: ['WiFi', 'Air conditioner', 'Hot tub', 'Double bed'].map(
+          (name) => ({ id: featureByName.get(name)! }),
+        ),
       },
-      {
-        propertyId: property.id,
-        name: 'A-Frame "Захід"',
-        description: 'Великий будинок для компанії з власною терасою.',
-        price: 450000, // 4500 грн
-        capacity: 4,
-        features: ['WiFi', 'Камін', 'Тераса', 'Мангал'],
-      },
-    ],
+    },
   });
 
-  console.log('✅ Seeding успішно завершено! Тестові дані додано.');
+  await prisma.unit.create({
+    data: {
+      propertyId: property.id,
+      categoryId: unitCategory.id,
+      name: 'A-Frame "Zakhid"',
+      description: 'A large cabin for a group with a private terrace.',
+      price: 450000,
+      capacity: 4,
+      features: {
+        connect: ['WiFi', 'Fireplace', 'Terrace', 'Grill'].map((name) => ({
+          id: featureByName.get(name)!,
+        })),
+      },
+    },
+  });
+
+  console.log('Seed completed successfully.');
 }
 
 main()
   .catch((e) => {
-    console.error('❌ Помилка під час seeding:', e);
+    console.error('Seed failed:', e);
     process.exit(1);
   })
   .finally(async () => {
