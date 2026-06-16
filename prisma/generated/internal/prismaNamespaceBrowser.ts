@@ -53,10 +53,14 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   User: 'User',
   Property: 'Property',
+  PropertyCategory: 'PropertyCategory',
   Unit: 'Unit',
+  UnitCategory: 'UnitCategory',
+  Feature: 'Feature',
   Booking: 'Booking',
+  Review: 'Review',
   Transaction: 'Transaction',
-  Review: 'Review'
+  Image: 'Image'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -94,16 +98,34 @@ export const PropertyScalarFieldEnum = {
   name: 'name',
   slug: 'slug',
   description: 'description',
-  coverImage: 'coverImage',
-  images: 'images',
   city: 'city',
   address: 'address',
+  latitude: 'latitude',
+  longitude: 'longitude',
+  status: 'status',
   policy: 'policy',
-  isActive: 'isActive',
+  contactPhone: 'contactPhone',
+  contactEmail: 'contactEmail',
+  website: 'website',
+  checkInFrom: 'checkInFrom',
+  checkOutTo: 'checkOutTo',
+  metaTitle: 'metaTitle',
+  metaDescription: 'metaDescription',
+  categoryId: 'categoryId',
   hostId: 'hostId'
 } as const
 
 export type PropertyScalarFieldEnum = (typeof PropertyScalarFieldEnum)[keyof typeof PropertyScalarFieldEnum]
+
+
+export const PropertyCategoryScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  name: 'name',
+  slug: 'slug'
+} as const
+
+export type PropertyCategoryScalarFieldEnum = (typeof PropertyCategoryScalarFieldEnum)[keyof typeof PropertyCategoryScalarFieldEnum]
 
 
 export const UnitScalarFieldEnum = {
@@ -114,12 +136,33 @@ export const UnitScalarFieldEnum = {
   description: 'description',
   price: 'price',
   capacity: 'capacity',
-  images: 'images',
-  features: 'features',
+  bookingType: 'bookingType',
+  status: 'status',
+  categoryId: 'categoryId',
   propertyId: 'propertyId'
 } as const
 
 export type UnitScalarFieldEnum = (typeof UnitScalarFieldEnum)[keyof typeof UnitScalarFieldEnum]
+
+
+export const UnitCategoryScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  name: 'name',
+  slug: 'slug'
+} as const
+
+export type UnitCategoryScalarFieldEnum = (typeof UnitCategoryScalarFieldEnum)[keyof typeof UnitCategoryScalarFieldEnum]
+
+
+export const FeatureScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  name: 'name',
+  slug: 'slug'
+} as const
+
+export type FeatureScalarFieldEnum = (typeof FeatureScalarFieldEnum)[keyof typeof FeatureScalarFieldEnum]
 
 
 export const BookingScalarFieldEnum = {
@@ -140,6 +183,18 @@ export const BookingScalarFieldEnum = {
 export type BookingScalarFieldEnum = (typeof BookingScalarFieldEnum)[keyof typeof BookingScalarFieldEnum]
 
 
+export const ReviewScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  rating: 'rating',
+  comment: 'comment',
+  userId: 'userId',
+  propertyId: 'propertyId'
+} as const
+
+export type ReviewScalarFieldEnum = (typeof ReviewScalarFieldEnum)[keyof typeof ReviewScalarFieldEnum]
+
+
 export const TransactionScalarFieldEnum = {
   id: 'id',
   createdAt: 'createdAt',
@@ -152,16 +207,16 @@ export const TransactionScalarFieldEnum = {
 export type TransactionScalarFieldEnum = (typeof TransactionScalarFieldEnum)[keyof typeof TransactionScalarFieldEnum]
 
 
-export const ReviewScalarFieldEnum = {
+export const ImageScalarFieldEnum = {
   id: 'id',
   createdAt: 'createdAt',
-  rating: 'rating',
-  comment: 'comment',
-  bookingId: 'bookingId',
-  propertyId: 'propertyId'
+  url: 'url',
+  sortOrder: 'sortOrder',
+  propertyId: 'propertyId',
+  unitId: 'unitId'
 } as const
 
-export type ReviewScalarFieldEnum = (typeof ReviewScalarFieldEnum)[keyof typeof ReviewScalarFieldEnum]
+export type ImageScalarFieldEnum = (typeof ImageScalarFieldEnum)[keyof typeof ImageScalarFieldEnum]
 
 
 export const SortOrder = {

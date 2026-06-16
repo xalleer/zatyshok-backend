@@ -2,6 +2,7 @@ import type { Response } from 'express';
 import { COOKIE_MAX_AGE_MS, ACCESS_TOKEN_COOKIE_NAME } from '../auth.constants';
 
 export function setAuthCookie(res: Response, token: string): void {
+  const isProd = process.env.NODE_ENV === 'production';
   // res.cookie(ACCESS_TOKEN_COOKIE_NAME, token, {
   //   httpOnly: true,
   //   secure: process.env.NODE_ENV === 'production',
@@ -10,8 +11,10 @@ export function setAuthCookie(res: Response, token: string): void {
   // });
   res.cookie(ACCESS_TOKEN_COOKIE_NAME, token, {
     httpOnly: true,
-    secure: false,
-    sameSite: 'lax', // OK для localhost
+    secure: isProd,
+    sameSite: isProd ? 'none' : 'lax',
+    maxAge: COOKIE_MAX_AGE_MS,
+    partitioned: true,
   });
 }
 

@@ -10,8 +10,12 @@
  */
 export type * from './models/User.ts'
 export type * from './models/Property.ts'
+export type * from './models/PropertyCategory.ts'
 export type * from './models/Unit.ts'
+export type * from './models/UnitCategory.ts'
+export type * from './models/Feature.ts'
 export type * from './models/Booking.ts'
-export type * from './models/Transaction.ts'
 export type * from './models/Review.ts'
+export type * from './models/Transaction.ts'
+export type * from './models/Image.ts'
 export type * from './commonInputTypes.ts'

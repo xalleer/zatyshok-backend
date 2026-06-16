@@ -18,35 +18,35 @@ export class CreateUnitDto {
   @MaxLength(100)
   name: string;
 
-  @ApiPropertyOptional({
-    example: 'Ідеально для романтичного вікенду на двох.',
-  })
+  @ApiPropertyOptional()
   @IsOptional()
   @IsString()
   @MaxLength(1000)
   description?: string;
 
-  @ApiProperty({
-    example: 250000,
-    description: 'Ціна за ніч у копійках (2500 грн = 250000)',
-  })
+  @ApiProperty({ example: '550e8400-e29b-41d4-a716-446655440000' })
+  @IsString()
+  @IsNotEmpty()
+  categoryId: string;
+
+  @ApiProperty({ example: 250000 })
   @IsInt()
   @Min(0)
   price: number;
 
-  @ApiProperty({ example: 2, description: 'Кількість гостей' })
+  @ApiProperty({ example: 2 })
   @IsInt()
   @Min(1)
   @Max(50)
   capacity: number;
 
   @ApiPropertyOptional({
-    example: ['WiFi', 'Чан', 'Камін'],
-    description: 'Список зручностей/фіч',
+    example: ['slug-wifi', 'slug-chan'],
+    description: 'Масив slug зручностей з таблиці Feature',
   })
   @IsOptional()
   @IsArray()
   @IsString({ each: true })
   @ArrayMaxSize(30)
-  features?: string[];
+  featureSlugs?: string[];
 }

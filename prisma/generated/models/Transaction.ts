@@ -39,7 +39,7 @@ export type TransactionMinAggregateOutputType = {
   createdAt: Date | null
   amount: number | null
   providerId: string | null
-  status: string | null
+  status: $Enums.TransactionStatus | null
   bookingId: string | null
 }
 
@@ -48,7 +48,7 @@ export type TransactionMaxAggregateOutputType = {
   createdAt: Date | null
   amount: number | null
   providerId: string | null
-  status: string | null
+  status: $Enums.TransactionStatus | null
   bookingId: string | null
 }
 
@@ -190,7 +190,7 @@ export type TransactionGroupByOutputType = {
   createdAt: Date
   amount: number
   providerId: string | null
-  status: string
+  status: $Enums.TransactionStatus
   bookingId: string
   _count: TransactionCountAggregateOutputType | null
   _avg: TransactionAvgAggregateOutputType | null
@@ -222,7 +222,7 @@ export type TransactionWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Transaction"> | Date | string
   amount?: Prisma.IntFilter<"Transaction"> | number
   providerId?: Prisma.StringNullableFilter<"Transaction"> | string | null
-  status?: Prisma.StringFilter<"Transaction"> | string
+  status?: Prisma.EnumTransactionStatusFilter<"Transaction"> | $Enums.TransactionStatus
   bookingId?: Prisma.StringFilter<"Transaction"> | string
   booking?: Prisma.XOR<Prisma.BookingScalarRelationFilter, Prisma.BookingWhereInput>
 }
@@ -246,7 +246,7 @@ export type TransactionWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Transaction"> | Date | string
   amount?: Prisma.IntFilter<"Transaction"> | number
   providerId?: Prisma.StringNullableFilter<"Transaction"> | string | null
-  status?: Prisma.StringFilter<"Transaction"> | string
+  status?: Prisma.EnumTransactionStatusFilter<"Transaction"> | $Enums.TransactionStatus
   booking?: Prisma.XOR<Prisma.BookingScalarRelationFilter, Prisma.BookingWhereInput>
 }, "id" | "bookingId">
 
@@ -272,7 +272,7 @@ export type TransactionScalarWhereWithAggregatesInput = {
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Transaction"> | Date | string
   amount?: Prisma.IntWithAggregatesFilter<"Transaction"> | number
   providerId?: Prisma.StringNullableWithAggregatesFilter<"Transaction"> | string | null
-  status?: Prisma.StringWithAggregatesFilter<"Transaction"> | string
+  status?: Prisma.EnumTransactionStatusWithAggregatesFilter<"Transaction"> | $Enums.TransactionStatus
   bookingId?: Prisma.StringWithAggregatesFilter<"Transaction"> | string
 }
 
@@ -281,7 +281,7 @@ export type TransactionCreateInput = {
   createdAt?: Date | string
   amount: number
   providerId?: string | null
-  status: string
+  status: $Enums.TransactionStatus
   booking: Prisma.BookingCreateNestedOneWithoutTransactionInput
 }
 
@@ -290,7 +290,7 @@ export type TransactionUncheckedCreateInput = {
   createdAt?: Date | string
   amount: number
   providerId?: string | null
-  status: string
+  status: $Enums.TransactionStatus
   bookingId: string
 }
 
@@ -299,7 +299,7 @@ export type TransactionUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   amount?: Prisma.IntFieldUpdateOperationsInput | number
   providerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
   booking?: Prisma.BookingUpdateOneRequiredWithoutTransactionNestedInput
 }
 
@@ -308,7 +308,7 @@ export type TransactionUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   amount?: Prisma.IntFieldUpdateOperationsInput | number
   providerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
   bookingId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
@@ -317,7 +317,7 @@ export type TransactionCreateManyInput = {
   createdAt?: Date | string
   amount: number
   providerId?: string | null
-  status: string
+  status: $Enums.TransactionStatus
   bookingId: string
 }
 
@@ -326,7 +326,7 @@ export type TransactionUpdateManyMutationInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   amount?: Prisma.IntFieldUpdateOperationsInput | number
   providerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
 }
 
 export type TransactionUncheckedUpdateManyInput = {
@@ -334,7 +334,7 @@ export type TransactionUncheckedUpdateManyInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   amount?: Prisma.IntFieldUpdateOperationsInput | number
   providerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
   bookingId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
@@ -410,12 +410,16 @@ export type TransactionUncheckedUpdateOneWithoutBookingNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.TransactionUpdateToOneWithWhereWithoutBookingInput, Prisma.TransactionUpdateWithoutBookingInput>, Prisma.TransactionUncheckedUpdateWithoutBookingInput>
 }
 
+export type EnumTransactionStatusFieldUpdateOperationsInput = {
+  set?: $Enums.TransactionStatus
+}
+
 export type TransactionCreateWithoutBookingInput = {
   id?: string
   createdAt?: Date | string
   amount: number
   providerId?: string | null
-  status: string
+  status: $Enums.TransactionStatus
 }
 
 export type TransactionUncheckedCreateWithoutBookingInput = {
@@ -423,7 +427,7 @@ export type TransactionUncheckedCreateWithoutBookingInput = {
   createdAt?: Date | string
   amount: number
   providerId?: string | null
-  status: string
+  status: $Enums.TransactionStatus
 }
 
 export type TransactionCreateOrConnectWithoutBookingInput = {
@@ -447,7 +451,7 @@ export type TransactionUpdateWithoutBookingInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   amount?: Prisma.IntFieldUpdateOperationsInput | number
   providerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
 }
 
 export type TransactionUncheckedUpdateWithoutBookingInput = {
@@ -455,7 +459,7 @@ export type TransactionUncheckedUpdateWithoutBookingInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   amount?: Prisma.IntFieldUpdateOperationsInput | number
   providerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
 }
 
 
@@ -520,7 +524,7 @@ export type $TransactionPayload<ExtArgs extends runtime.Types.Extensions.Interna
     createdAt: Date
     amount: number
     providerId: string | null
-    status: string
+    status: $Enums.TransactionStatus
     bookingId: string
   }, ExtArgs["result"]["transaction"]>
   composites: {}
@@ -950,7 +954,7 @@ export interface TransactionFieldRefs {
   readonly createdAt: Prisma.FieldRef<"Transaction", 'DateTime'>
   readonly amount: Prisma.FieldRef<"Transaction", 'Int'>
   readonly providerId: Prisma.FieldRef<"Transaction", 'String'>
-  readonly status: Prisma.FieldRef<"Transaction", 'String'>
+  readonly status: Prisma.FieldRef<"Transaction", 'TransactionStatus'>
   readonly bookingId: Prisma.FieldRef<"Transaction", 'String'>
 }
     

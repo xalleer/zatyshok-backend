@@ -18,12 +18,40 @@ export const Role = {
 export type Role = (typeof Role)[keyof typeof Role]
 
 
+export const PropertyStatus = {
+  DRAFT: 'DRAFT',
+  PENDING_MODERATION: 'PENDING_MODERATION',
+  ACTIVE: 'ACTIVE',
+  REJECTED: 'REJECTED',
+  BLOCKED: 'BLOCKED'
+} as const
+
+export type PropertyStatus = (typeof PropertyStatus)[keyof typeof PropertyStatus]
+
+
+export const UnitStatus = {
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE',
+  MAINTENANCE: 'MAINTENANCE'
+} as const
+
+export type UnitStatus = (typeof UnitStatus)[keyof typeof UnitStatus]
+
+
 export const CancellationPolicy = {
   FLEXIBLE: 'FLEXIBLE',
   STRICT: 'STRICT'
 } as const
 
 export type CancellationPolicy = (typeof CancellationPolicy)[keyof typeof CancellationPolicy]
+
+
+export const BookingType = {
+  DAILY: 'DAILY',
+  HOURLY: 'HOURLY'
+} as const
+
+export type BookingType = (typeof BookingType)[keyof typeof BookingType]
 
 
 export const BookingStatus = {
@@ -43,3 +71,13 @@ export const PaymentMethod = {
 } as const
 
 export type PaymentMethod = (typeof PaymentMethod)[keyof typeof PaymentMethod]
+
+
+export const TransactionStatus = {
+  PENDING: 'PENDING',
+  SUCCESS: 'SUCCESS',
+  FAILED: 'FAILED',
+  REFUNDED: 'REFUNDED'
+} as const
+
+export type TransactionStatus = (typeof TransactionStatus)[keyof typeof TransactionStatus]

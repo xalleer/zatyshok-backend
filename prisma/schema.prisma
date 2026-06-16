@@ -15,14 +15,18 @@ datasource db {
 }
 
 model User {
-  id         String     @id @default(uuid())
-  createdAt  DateTime   @default(now()) @map("created_at")
-  updatedAt  DateTime   @updatedAt @map("updated_at")
-  name       String?
-  phone      String     @unique
-  role       Role       @default(CLIENT)
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  name  String?
+  phone String  @unique
+
+  role Role @default(CLIENT)
+
   properties Property[] @relation("HostProperties")
   bookings   Booking[]  @relation("ClientBookings")
+  Review     Review[]
 }
 
 model Property {
@@ -34,21 +38,51 @@ model Property {
   slug        String  @unique
   description String?
 
-  coverImage String?
-  images     String[]
+  city    String?
+  address String?
 
-  city     String?
-  address  String?
-  location Unsupported("geometry(Point, 4326)")?
+  latitude  Float?
+  longitude Float?
 
-  policy   CancellationPolicy @default(FLEXIBLE)
-  isActive Boolean            @default(true)
+  location Unsupported("geometry(Point,4326)")?
+
+  status PropertyStatus @default(DRAFT)
+
+  policy CancellationPolicy @default(FLEXIBLE)
+
+  contactPhone String?
+  contactEmail String?
+  website      String?
+
+  checkInFrom String?
+  checkOutTo  String?
+
+  metaTitle       String?
+  metaDescription String?
+
+  categoryId String
+  category   PropertyCategory @relation(fields: [categoryId], references: [id])
 
   hostId String
   host   User   @relation("HostProperties", fields: [hostId], references: [id], onDelete: Cascade)
 
   units   Unit[]
+  images  Image[]
   reviews Review[]
+
+  @@index([slug])
+  @@index([city])
+  @@index([status])
+}
+
+model PropertyCategory {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+
+  name String
+  slug String @unique
+
+  properties Property[]
 }
 
 model Unit {
@@ -58,16 +92,48 @@ model Unit {
 
   name        String
   description String?
-  price       Int
-  capacity    Int
 
-  images   String[]
-  features String[]
+  price    Int
+  capacity Int
+
+  bookingType BookingType @default(DAILY)
+
+  status UnitStatus @default(ACTIVE)
+
+  categoryId String
+  category   UnitCategory @relation(fields: [categoryId], references: [id])
 
   propertyId String
   property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
 
+  features Feature[]
+
+  images Image[]
+
   bookings Booking[]
+
+  @@index([propertyId])
+  @@index([status])
+}
+
+model UnitCategory {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+
+  name String
+  slug String @unique
+
+  units Unit[]
+}
+
+model Feature {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+
+  name String
+  slug String @unique
+
+  units Unit[]
 }
 
 model Booking {
@@ -77,11 +143,13 @@ model Booking {
 
   checkIn  DateTime
   checkOut DateTime
-  status   BookingStatus @default(HOLD)
+
+  status BookingStatus @default(HOLD)
 
   totalPrice       Int
   prepaymentAmount Int?
-  paymentMethod    PaymentMethod @default(ONLINE)
+
+  paymentMethod PaymentMethod @default(ONLINE)
 
   comment String?
 
@@ -91,20 +159,12 @@ model Booking {
   unitId String
   unit   Unit   @relation(fields: [unitId], references: [id])
 
-  review      Review?
   transaction Transaction?
-}
 
-model Transaction {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now()) @map("created_at")
-
-  amount     Int
-  providerId String?
-  status     String
-
-  bookingId String  @unique
-  booking   Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  @@index([userId])
+  @@index([unitId])
+  @@index([status])
+  @@index([checkIn, checkOut])
 }
 
 model Review {
@@ -114,11 +174,45 @@ model Review {
   rating  Int
   comment String?
 
-  bookingId String  @unique
-  booking   Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
 
   propertyId String
   property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  @@index([propertyId])
+  @@index([userId])
+}
+
+model Transaction {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+
+  amount Int
+
+  providerId String?
+  status     TransactionStatus
+
+  bookingId String  @unique
+  booking   Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+}
+
+model Image {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+
+  url String
+
+  sortOrder Int @default(0)
+
+  propertyId String?
+  property   Property? @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  unitId String?
+  unit   Unit?   @relation(fields: [unitId], references: [id], onDelete: Cascade)
+
+  @@index([propertyId])
+  @@index([unitId])
 }
 
 enum Role {
@@ -127,20 +221,46 @@ enum Role {
   ADMIN
 }
 
+enum PropertyStatus {
+  DRAFT
+  PENDING_MODERATION
+  ACTIVE
+  REJECTED
+  BLOCKED
+}
+
+enum UnitStatus {
+  ACTIVE
+  INACTIVE
+  MAINTENANCE
+}
+
 enum CancellationPolicy {
   FLEXIBLE
   STRICT
 }
 
+enum BookingType {
+  DAILY
+  HOURLY
+}
+
 enum BookingStatus {
-  HOLD // Тимчасово заблоковано в Redis/БД на 15 хв
-  PENDING // Очікує підтвердження від власника (для Request Booking)
-  CONFIRMED // Успішно заброньовано (оплачено/підтверджено)
-  CANCELLED // Скасовано клієнтом або власником
-  COMPLETED // Клієнт виїхав (можна залишати відгук)
+  HOLD
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
 }
 
 enum PaymentMethod {
   ONLINE
   CASH
+}
+
+enum TransactionStatus {
+  PENDING
+  SUCCESS
+  FAILED
+  REFUNDED
 }

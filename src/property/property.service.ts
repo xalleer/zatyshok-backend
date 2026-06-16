@@ -51,27 +51,38 @@ export class PropertyService {
     return { longitude: parseFloat(match[1]), latitude: parseFloat(match[2]) };
   }
 
-  private formatProperty(
-    property: any,
-    aggregates?: { rating: number | null; reviewCount: number },
-  ): PropertyResponseDto {
+// В formatProperty додаємо units:
+  private formatProperty(property: any, aggregates?: { rating: number | null; reviewCount: number }): PropertyResponseDto {
     const coords = this.parseLocation(property.location);
     return {
       id: property.id,
       name: property.name,
       slug: property.slug,
       description: property.description,
-      coverImage: property.coverImage,
-      images: property.images,
+      images: property.images ?? [],       // тепер Image[]
       city: property.city,
       address: property.address,
       latitude: coords?.latitude ?? null,
       longitude: coords?.longitude ?? null,
       policy: property.policy,
-      isActive: property.isActive,
       hostId: property.hostId,
       createdAt: property.createdAt,
       updatedAt: property.updatedAt,
+      units: property.units?.map((u: any) => ({
+        id: u.id,
+        name: u.name,
+        description: u.description ?? null,
+        price: u.price,
+        capacity: u.capacity,
+        status: u.status,
+        bookingType: u.bookingType,
+        images: u.images ?? [],
+        features: u.features ?? [],
+        propertyId: u.propertyId,
+        categoryId: u.categoryId,
+        createdAt: u.createdAt,
+        updatedAt: u.updatedAt,
+      })) ?? [],
       rating: aggregates?.rating ?? null,
       reviewCount: aggregates?.reviewCount ?? 0,
     };
@@ -131,55 +142,47 @@ export class PropertyService {
     return this.formatProperty(fresh);
   }
 
-  async findAll(
-    pagination: PaginationDto,
-  ): Promise<PaginatedResponseDto<PropertyResponseDto>> {
+  async findAll(pagination: PaginationDto): Promise<PaginatedResponseDto<PropertyResponseDto>> {
     const { page = 1, limit = 10 } = pagination;
-    const offset = (page - 1) * limit;
+    const skip = (page - 1) * limit;
 
-    // Отримуємо загальну кількість
-    const countResult = await this.prisma.$queryRaw<any[]>`
-      SELECT COUNT(*) as total
-      FROM "Property" p
-      WHERE p."isActive" = true
-    `;
-    const total = parseInt(countResult[0].total);
-
-    // Отримуємо координати через ST_AsText для парсингу з пагінацією
-    const properties = await this.prisma.$queryRaw<any[]>`
-      SELECT
-        p.*,
-        ST_AsText(p.location) as location,
-        ROUND(AVG(r.rating)::numeric, 1) as rating,
-        COUNT(r.id)::int as "reviewCount"
-      FROM "Property" p
-      LEFT JOIN "Review" r ON r."propertyId" = p.id
-      WHERE p."isActive" = true
-      GROUP BY p.id
-      ORDER BY p."created_at" DESC
-      LIMIT ${limit}
-      OFFSET ${offset}
-    `;
-
-    const data = properties.map((p) =>
-      this.formatProperty(p, {
-        rating: p.rating ? parseFloat(p.rating) : null,
-        reviewCount: p.reviewCount ?? 0,
+    const [total, properties] = await Promise.all([
+      this.prisma.property.count({ where: { status: 'ACTIVE' } }),
+      this.prisma.property.findMany({
+        where: { status: 'ACTIVE' },
+        include: {
+          images: { orderBy: { sortOrder: 'asc' } },
+          units: {
+            include: {
+              images: { orderBy: { sortOrder: 'asc' } },
+              features: true,
+            },
+            orderBy: { createdAt: 'asc' },
+          },
+          reviews: { select: { rating: true } },
+        },
+        orderBy: { createdAt: 'desc' },
+        skip,
+        take: limit,
       }),
-    );
+    ]);
+
+    const data = properties.map((p) => {
+      const ratings = p.reviews.map((r) => r.rating);
+      const avg = ratings.length
+        ? Math.round((ratings.reduce((a, b) => a + b, 0) / ratings.length) * 10) / 10
+        : null;
+
+      return this.formatProperty(
+        { ...p, location: null }, // координати окремо якщо потрібні
+        { rating: avg, reviewCount: ratings.length },
+      );
+    });
 
     const totalPages = Math.ceil(total / limit);
-
     return {
       data,
-      meta: {
-        total,
-        page,
-        limit,
-        totalPages,
-        hasNext: page < totalPages,
-        hasPrevious: page > 1,
-      },
+      meta: { total, page, limit, totalPages, hasNext: page < totalPages, hasPrevious: page > 1 },
     };
   }
 

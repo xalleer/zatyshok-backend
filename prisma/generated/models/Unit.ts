@@ -44,6 +44,9 @@ export type UnitMinAggregateOutputType = {
   description: string | null
   price: number | null
   capacity: number | null
+  bookingType: $Enums.BookingType | null
+  status: $Enums.UnitStatus | null
+  categoryId: string | null
   propertyId: string | null
 }
 
@@ -55,6 +58,9 @@ export type UnitMaxAggregateOutputType = {
   description: string | null
   price: number | null
   capacity: number | null
+  bookingType: $Enums.BookingType | null
+  status: $Enums.UnitStatus | null
+  categoryId: string | null
   propertyId: string | null
 }
 
@@ -66,8 +72,9 @@ export type UnitCountAggregateOutputType = {
   description: number
   price: number
   capacity: number
-  images: number
-  features: number
+  bookingType: number
+  status: number
+  categoryId: number
   propertyId: number
   _all: number
 }
@@ -91,6 +98,9 @@ export type UnitMinAggregateInputType = {
   description?: true
   price?: true
   capacity?: true
+  bookingType?: true
+  status?: true
+  categoryId?: true
   propertyId?: true
 }
 
@@ -102,6 +112,9 @@ export type UnitMaxAggregateInputType = {
   description?: true
   price?: true
   capacity?: true
+  bookingType?: true
+  status?: true
+  categoryId?: true
   propertyId?: true
 }
 
@@ -113,8 +126,9 @@ export type UnitCountAggregateInputType = {
   description?: true
   price?: true
   capacity?: true
-  images?: true
-  features?: true
+  bookingType?: true
+  status?: true
+  categoryId?: true
   propertyId?: true
   _all?: true
 }
@@ -213,8 +227,9 @@ export type UnitGroupByOutputType = {
   description: string | null
   price: number
   capacity: number
-  images: string[]
-  features: string[]
+  bookingType: $Enums.BookingType
+  status: $Enums.UnitStatus
+  categoryId: string
   propertyId: string
   _count: UnitCountAggregateOutputType | null
   _avg: UnitAvgAggregateOutputType | null
@@ -249,10 +264,14 @@ export type UnitWhereInput = {
   description?: Prisma.StringNullableFilter<"Unit"> | string | null
   price?: Prisma.IntFilter<"Unit"> | number
   capacity?: Prisma.IntFilter<"Unit"> | number
-  images?: Prisma.StringNullableListFilter<"Unit">
-  features?: Prisma.StringNullableListFilter<"Unit">
+  bookingType?: Prisma.EnumBookingTypeFilter<"Unit"> | $Enums.BookingType
+  status?: Prisma.EnumUnitStatusFilter<"Unit"> | $Enums.UnitStatus
+  categoryId?: Prisma.StringFilter<"Unit"> | string
   propertyId?: Prisma.StringFilter<"Unit"> | string
+  category?: Prisma.XOR<Prisma.UnitCategoryScalarRelationFilter, Prisma.UnitCategoryWhereInput>
   property?: Prisma.XOR<Prisma.PropertyScalarRelationFilter, Prisma.PropertyWhereInput>
+  features?: Prisma.FeatureListRelationFilter
+  images?: Prisma.ImageListRelationFilter
   bookings?: Prisma.BookingListRelationFilter
 }
 
@@ -264,10 +283,14 @@ export type UnitOrderByWithRelationInput = {
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   price?: Prisma.SortOrder
   capacity?: Prisma.SortOrder
-  images?: Prisma.SortOrder
-  features?: Prisma.SortOrder
+  bookingType?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  categoryId?: Prisma.SortOrder
   propertyId?: Prisma.SortOrder
+  category?: Prisma.UnitCategoryOrderByWithRelationInput
   property?: Prisma.PropertyOrderByWithRelationInput
+  features?: Prisma.FeatureOrderByRelationAggregateInput
+  images?: Prisma.ImageOrderByRelationAggregateInput
   bookings?: Prisma.BookingOrderByRelationAggregateInput
 }
 
@@ -282,10 +305,14 @@ export type UnitWhereUniqueInput = Prisma.AtLeast<{
   description?: Prisma.StringNullableFilter<"Unit"> | string | null
   price?: Prisma.IntFilter<"Unit"> | number
   capacity?: Prisma.IntFilter<"Unit"> | number
-  images?: Prisma.StringNullableListFilter<"Unit">
-  features?: Prisma.StringNullableListFilter<"Unit">
+  bookingType?: Prisma.EnumBookingTypeFilter<"Unit"> | $Enums.BookingType
+  status?: Prisma.EnumUnitStatusFilter<"Unit"> | $Enums.UnitStatus
+  categoryId?: Prisma.StringFilter<"Unit"> | string
   propertyId?: Prisma.StringFilter<"Unit"> | string
+  category?: Prisma.XOR<Prisma.UnitCategoryScalarRelationFilter, Prisma.UnitCategoryWhereInput>
   property?: Prisma.XOR<Prisma.PropertyScalarRelationFilter, Prisma.PropertyWhereInput>
+  features?: Prisma.FeatureListRelationFilter
+  images?: Prisma.ImageListRelationFilter
   bookings?: Prisma.BookingListRelationFilter
 }, "id">
 
@@ -297,8 +324,9 @@ export type UnitOrderByWithAggregationInput = {
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   price?: Prisma.SortOrder
   capacity?: Prisma.SortOrder
-  images?: Prisma.SortOrder
-  features?: Prisma.SortOrder
+  bookingType?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  categoryId?: Prisma.SortOrder
   propertyId?: Prisma.SortOrder
   _count?: Prisma.UnitCountOrderByAggregateInput
   _avg?: Prisma.UnitAvgOrderByAggregateInput
@@ -318,8 +346,9 @@ export type UnitScalarWhereWithAggregatesInput = {
   description?: Prisma.StringNullableWithAggregatesFilter<"Unit"> | string | null
   price?: Prisma.IntWithAggregatesFilter<"Unit"> | number
   capacity?: Prisma.IntWithAggregatesFilter<"Unit"> | number
-  images?: Prisma.StringNullableListFilter<"Unit">
-  features?: Prisma.StringNullableListFilter<"Unit">
+  bookingType?: Prisma.EnumBookingTypeWithAggregatesFilter<"Unit"> | $Enums.BookingType
+  status?: Prisma.EnumUnitStatusWithAggregatesFilter<"Unit"> | $Enums.UnitStatus
+  categoryId?: Prisma.StringWithAggregatesFilter<"Unit"> | string
   propertyId?: Prisma.StringWithAggregatesFilter<"Unit"> | string
 }
 
@@ -331,9 +360,12 @@ export type UnitCreateInput = {
   description?: string | null
   price: number
   capacity: number
-  images?: Prisma.UnitCreateimagesInput | string[]
-  features?: Prisma.UnitCreatefeaturesInput | string[]
+  bookingType?: $Enums.BookingType
+  status?: $Enums.UnitStatus
+  category: Prisma.UnitCategoryCreateNestedOneWithoutUnitsInput
   property: Prisma.PropertyCreateNestedOneWithoutUnitsInput
+  features?: Prisma.FeatureCreateNestedManyWithoutUnitsInput
+  images?: Prisma.ImageCreateNestedManyWithoutUnitInput
   bookings?: Prisma.BookingCreateNestedManyWithoutUnitInput
 }
 
@@ -345,9 +377,12 @@ export type UnitUncheckedCreateInput = {
   description?: string | null
   price: number
   capacity: number
-  images?: Prisma.UnitCreateimagesInput | string[]
-  features?: Prisma.UnitCreatefeaturesInput | string[]
+  bookingType?: $Enums.BookingType
+  status?: $Enums.UnitStatus
+  categoryId: string
   propertyId: string
+  features?: Prisma.FeatureUncheckedCreateNestedManyWithoutUnitsInput
+  images?: Prisma.ImageUncheckedCreateNestedManyWithoutUnitInput
   bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutUnitInput
 }
 
@@ -359,9 +394,12 @@ export type UnitUpdateInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.IntFieldUpdateOperationsInput | number
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
-  images?: Prisma.UnitUpdateimagesInput | string[]
-  features?: Prisma.UnitUpdatefeaturesInput | string[]
+  bookingType?: Prisma.EnumBookingTypeFieldUpdateOperationsInput | $Enums.BookingType
+  status?: Prisma.EnumUnitStatusFieldUpdateOperationsInput | $Enums.UnitStatus
+  category?: Prisma.UnitCategoryUpdateOneRequiredWithoutUnitsNestedInput
   property?: Prisma.PropertyUpdateOneRequiredWithoutUnitsNestedInput
+  features?: Prisma.FeatureUpdateManyWithoutUnitsNestedInput
+  images?: Prisma.ImageUpdateManyWithoutUnitNestedInput
   bookings?: Prisma.BookingUpdateManyWithoutUnitNestedInput
 }
 
@@ -373,9 +411,12 @@ export type UnitUncheckedUpdateInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.IntFieldUpdateOperationsInput | number
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
-  images?: Prisma.UnitUpdateimagesInput | string[]
-  features?: Prisma.UnitUpdatefeaturesInput | string[]
+  bookingType?: Prisma.EnumBookingTypeFieldUpdateOperationsInput | $Enums.BookingType
+  status?: Prisma.EnumUnitStatusFieldUpdateOperationsInput | $Enums.UnitStatus
+  categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   propertyId?: Prisma.StringFieldUpdateOperationsInput | string
+  features?: Prisma.FeatureUncheckedUpdateManyWithoutUnitsNestedInput
+  images?: Prisma.ImageUncheckedUpdateManyWithoutUnitNestedInput
   bookings?: Prisma.BookingUncheckedUpdateManyWithoutUnitNestedInput
 }
 
@@ -387,8 +428,9 @@ export type UnitCreateManyInput = {
   description?: string | null
   price: number
   capacity: number
-  images?: Prisma.UnitCreateimagesInput | string[]
-  features?: Prisma.UnitCreatefeaturesInput | string[]
+  bookingType?: $Enums.BookingType
+  status?: $Enums.UnitStatus
+  categoryId: string
   propertyId: string
 }
 
@@ -400,8 +442,8 @@ export type UnitUpdateManyMutationInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.IntFieldUpdateOperationsInput | number
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
-  images?: Prisma.UnitUpdateimagesInput | string[]
-  features?: Prisma.UnitUpdatefeaturesInput | string[]
+  bookingType?: Prisma.EnumBookingTypeFieldUpdateOperationsInput | $Enums.BookingType
+  status?: Prisma.EnumUnitStatusFieldUpdateOperationsInput | $Enums.UnitStatus
 }
 
 export type UnitUncheckedUpdateManyInput = {
@@ -412,8 +454,9 @@ export type UnitUncheckedUpdateManyInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.IntFieldUpdateOperationsInput | number
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
-  images?: Prisma.UnitUpdateimagesInput | string[]
-  features?: Prisma.UnitUpdatefeaturesInput | string[]
+  bookingType?: Prisma.EnumBookingTypeFieldUpdateOperationsInput | $Enums.BookingType
+  status?: Prisma.EnumUnitStatusFieldUpdateOperationsInput | $Enums.UnitStatus
+  categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   propertyId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
@@ -435,8 +478,9 @@ export type UnitCountOrderByAggregateInput = {
   description?: Prisma.SortOrder
   price?: Prisma.SortOrder
   capacity?: Prisma.SortOrder
-  images?: Prisma.SortOrder
-  features?: Prisma.SortOrder
+  bookingType?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  categoryId?: Prisma.SortOrder
   propertyId?: Prisma.SortOrder
 }
 
@@ -453,6 +497,9 @@ export type UnitMaxOrderByAggregateInput = {
   description?: Prisma.SortOrder
   price?: Prisma.SortOrder
   capacity?: Prisma.SortOrder
+  bookingType?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  categoryId?: Prisma.SortOrder
   propertyId?: Prisma.SortOrder
 }
 
@@ -464,6 +511,9 @@ export type UnitMinOrderByAggregateInput = {
   description?: Prisma.SortOrder
   price?: Prisma.SortOrder
   capacity?: Prisma.SortOrder
+  bookingType?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  categoryId?: Prisma.SortOrder
   propertyId?: Prisma.SortOrder
 }
 
@@ -475,6 +525,11 @@ export type UnitSumOrderByAggregateInput = {
 export type UnitScalarRelationFilter = {
   is?: Prisma.UnitWhereInput
   isNot?: Prisma.UnitWhereInput
+}
+
+export type UnitNullableScalarRelationFilter = {
+  is?: Prisma.UnitWhereInput | null
+  isNot?: Prisma.UnitWhereInput | null
 }
 
 export type UnitCreateNestedManyWithoutPropertyInput = {
@@ -519,14 +574,6 @@ export type UnitUncheckedUpdateManyWithoutPropertyNestedInput = {
   deleteMany?: Prisma.UnitScalarWhereInput | Prisma.UnitScalarWhereInput[]
 }
 
-export type UnitCreateimagesInput = {
-  set: string[]
-}
-
-export type UnitCreatefeaturesInput = {
-  set: string[]
-}
-
 export type IntFieldUpdateOperationsInput = {
   set?: number
   increment?: number
@@ -535,14 +582,92 @@ export type IntFieldUpdateOperationsInput = {
   divide?: number
 }
 
-export type UnitUpdateimagesInput = {
-  set?: string[]
-  push?: string | string[]
+export type EnumBookingTypeFieldUpdateOperationsInput = {
+  set?: $Enums.BookingType
 }
 
-export type UnitUpdatefeaturesInput = {
-  set?: string[]
-  push?: string | string[]
+export type EnumUnitStatusFieldUpdateOperationsInput = {
+  set?: $Enums.UnitStatus
+}
+
+export type UnitCreateNestedManyWithoutCategoryInput = {
+  create?: Prisma.XOR<Prisma.UnitCreateWithoutCategoryInput, Prisma.UnitUncheckedCreateWithoutCategoryInput> | Prisma.UnitCreateWithoutCategoryInput[] | Prisma.UnitUncheckedCreateWithoutCategoryInput[]
+  connectOrCreate?: Prisma.UnitCreateOrConnectWithoutCategoryInput | Prisma.UnitCreateOrConnectWithoutCategoryInput[]
+  createMany?: Prisma.UnitCreateManyCategoryInputEnvelope
+  connect?: Prisma.UnitWhereUniqueInput | Prisma.UnitWhereUniqueInput[]
+}
+
+export type UnitUncheckedCreateNestedManyWithoutCategoryInput = {
+  create?: Prisma.XOR<Prisma.UnitCreateWithoutCategoryInput, Prisma.UnitUncheckedCreateWithoutCategoryInput> | Prisma.UnitCreateWithoutCategoryInput[] | Prisma.UnitUncheckedCreateWithoutCategoryInput[]
+  connectOrCreate?: Prisma.UnitCreateOrConnectWithoutCategoryInput | Prisma.UnitCreateOrConnectWithoutCategoryInput[]
+  createMany?: Prisma.UnitCreateManyCategoryInputEnvelope
+  connect?: Prisma.UnitWhereUniqueInput | Prisma.UnitWhereUniqueInput[]
+}
+
+export type UnitUpdateManyWithoutCategoryNestedInput = {
+  create?: Prisma.XOR<Prisma.UnitCreateWithoutCategoryInput, Prisma.UnitUncheckedCreateWithoutCategoryInput> | Prisma.UnitCreateWithoutCategoryInput[] | Prisma.UnitUncheckedCreateWithoutCategoryInput[]
+  connectOrCreate?: Prisma.UnitCreateOrConnectWithoutCategoryInput | Prisma.UnitCreateOrConnectWithoutCategoryInput[]
+  upsert?: Prisma.UnitUpsertWithWhereUniqueWithoutCategoryInput | Prisma.UnitUpsertWithWhereUniqueWithoutCategoryInput[]
+  createMany?: Prisma.UnitCreateManyCategoryInputEnvelope
+  set?: Prisma.UnitWhereUniqueInput | Prisma.UnitWhereUniqueInput[]
+  disconnect?: Prisma.UnitWhereUniqueInput | Prisma.UnitWhereUniqueInput[]
+  delete?: Prisma.UnitWhereUniqueInput | Prisma.UnitWhereUniqueInput[]
+  connect?: Prisma.UnitWhereUniqueInput | Prisma.UnitWhereUniqueInput[]
+  update?: Prisma.UnitUpdateWithWhereUniqueWithoutCategoryInput | Prisma.UnitUpdateWithWhereUniqueWithoutCategoryInput[]
+  updateMany?: Prisma.UnitUpdateManyWithWhereWithoutCategoryInput | Prisma.UnitUpdateManyWithWhereWithoutCategoryInput[]
+  deleteMany?: Prisma.UnitScalarWhereInput | Prisma.UnitScalarWhereInput[]
+}
+
+export type UnitUncheckedUpdateManyWithoutCategoryNestedInput = {
+  create?: Prisma.XOR<Prisma.UnitCreateWithoutCategoryInput, Prisma.UnitUncheckedCreateWithoutCategoryInput> | Prisma.UnitCreateWithoutCategoryInput[] | Prisma.UnitUncheckedCreateWithoutCategoryInput[]
+  connectOrCreate?: Prisma.UnitCreateOrConnectWithoutCategoryInput | Prisma.UnitCreateOrConnectWithoutCategoryInput[]
+  upsert?: Prisma.UnitUpsertWithWhereUniqueWithoutCategoryInput | Prisma.UnitUpsertWithWhereUniqueWithoutCategoryInput[]
+  createMany?: Prisma.UnitCreateManyCategoryInputEnvelope
+  set?: Prisma.UnitWhereUniqueInput | Prisma.UnitWhereUniqueInput[]
+  disconnect?: Prisma.UnitWhereUniqueInput | Prisma.UnitWhereUniqueInput[]
+  delete?: Prisma.UnitWhereUniqueInput | Prisma.UnitWhereUniqueInput[]
+  connect?: Prisma.UnitWhereUniqueInput | Prisma.UnitWhereUniqueInput[]
+  update?: Prisma.UnitUpdateWithWhereUniqueWithoutCategoryInput | Prisma.UnitUpdateWithWhereUniqueWithoutCategoryInput[]
+  updateMany?: Prisma.UnitUpdateManyWithWhereWithoutCategoryInput | Prisma.UnitUpdateManyWithWhereWithoutCategoryInput[]
+  deleteMany?: Prisma.UnitScalarWhereInput | Prisma.UnitScalarWhereInput[]
+}
+
+export type UnitCreateNestedManyWithoutFeaturesInput = {
+  create?: Prisma.XOR<Prisma.UnitCreateWithoutFeaturesInput, Prisma.UnitUncheckedCreateWithoutFeaturesInput> | Prisma.UnitCreateWithoutFeaturesInput[] | Prisma.UnitUncheckedCreateWithoutFeaturesInput[]
+  connectOrCreate?: Prisma.UnitCreateOrConnectWithoutFeaturesInput | Prisma.UnitCreateOrConnectWithoutFeaturesInput[]
+  connect?: Prisma.UnitWhereUniqueInput | Prisma.UnitWhereUniqueInput[]
+}
+
+export type UnitUncheckedCreateNestedManyWithoutFeaturesInput = {
+  create?: Prisma.XOR<Prisma.UnitCreateWithoutFeaturesInput, Prisma.UnitUncheckedCreateWithoutFeaturesInput> | Prisma.UnitCreateWithoutFeaturesInput[] | Prisma.UnitUncheckedCreateWithoutFeaturesInput[]
+  connectOrCreate?: Prisma.UnitCreateOrConnectWithoutFeaturesInput | Prisma.UnitCreateOrConnectWithoutFeaturesInput[]
+  connect?: Prisma.UnitWhereUniqueInput | Prisma.UnitWhereUniqueInput[]
+}
+
+export type UnitUpdateManyWithoutFeaturesNestedInput = {
+  create?: Prisma.XOR<Prisma.UnitCreateWithoutFeaturesInput, Prisma.UnitUncheckedCreateWithoutFeaturesInput> | Prisma.UnitCreateWithoutFeaturesInput[] | Prisma.UnitUncheckedCreateWithoutFeaturesInput[]
+  connectOrCreate?: Prisma.UnitCreateOrConnectWithoutFeaturesInput | Prisma.UnitCreateOrConnectWithoutFeaturesInput[]
+  upsert?: Prisma.UnitUpsertWithWhereUniqueWithoutFeaturesInput | Prisma.UnitUpsertWithWhereUniqueWithoutFeaturesInput[]
+  set?: Prisma.UnitWhereUniqueInput | Prisma.UnitWhereUniqueInput[]
+  disconnect?: Prisma.UnitWhereUniqueInput | Prisma.UnitWhereUniqueInput[]
+  delete?: Prisma.UnitWhereUniqueInput | Prisma.UnitWhereUniqueInput[]
+  connect?: Prisma.UnitWhereUniqueInput | Prisma.UnitWhereUniqueInput[]
+  update?: Prisma.UnitUpdateWithWhereUniqueWithoutFeaturesInput | Prisma.UnitUpdateWithWhereUniqueWithoutFeaturesInput[]
+  updateMany?: Prisma.UnitUpdateManyWithWhereWithoutFeaturesInput | Prisma.UnitUpdateManyWithWhereWithoutFeaturesInput[]
+  deleteMany?: Prisma.UnitScalarWhereInput | Prisma.UnitScalarWhereInput[]
+}
+
+export type UnitUncheckedUpdateManyWithoutFeaturesNestedInput = {
+  create?: Prisma.XOR<Prisma.UnitCreateWithoutFeaturesInput, Prisma.UnitUncheckedCreateWithoutFeaturesInput> | Prisma.UnitCreateWithoutFeaturesInput[] | Prisma.UnitUncheckedCreateWithoutFeaturesInput[]
+  connectOrCreate?: Prisma.UnitCreateOrConnectWithoutFeaturesInput | Prisma.UnitCreateOrConnectWithoutFeaturesInput[]
+  upsert?: Prisma.UnitUpsertWithWhereUniqueWithoutFeaturesInput | Prisma.UnitUpsertWithWhereUniqueWithoutFeaturesInput[]
+  set?: Prisma.UnitWhereUniqueInput | Prisma.UnitWhereUniqueInput[]
+  disconnect?: Prisma.UnitWhereUniqueInput | Prisma.UnitWhereUniqueInput[]
+  delete?: Prisma.UnitWhereUniqueInput | Prisma.UnitWhereUniqueInput[]
+  connect?: Prisma.UnitWhereUniqueInput | Prisma.UnitWhereUniqueInput[]
+  update?: Prisma.UnitUpdateWithWhereUniqueWithoutFeaturesInput | Prisma.UnitUpdateWithWhereUniqueWithoutFeaturesInput[]
+  updateMany?: Prisma.UnitUpdateManyWithWhereWithoutFeaturesInput | Prisma.UnitUpdateManyWithWhereWithoutFeaturesInput[]
+  deleteMany?: Prisma.UnitScalarWhereInput | Prisma.UnitScalarWhereInput[]
 }
 
 export type UnitCreateNestedOneWithoutBookingsInput = {
@@ -559,6 +684,22 @@ export type UnitUpdateOneRequiredWithoutBookingsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UnitUpdateToOneWithWhereWithoutBookingsInput, Prisma.UnitUpdateWithoutBookingsInput>, Prisma.UnitUncheckedUpdateWithoutBookingsInput>
 }
 
+export type UnitCreateNestedOneWithoutImagesInput = {
+  create?: Prisma.XOR<Prisma.UnitCreateWithoutImagesInput, Prisma.UnitUncheckedCreateWithoutImagesInput>
+  connectOrCreate?: Prisma.UnitCreateOrConnectWithoutImagesInput
+  connect?: Prisma.UnitWhereUniqueInput
+}
+
+export type UnitUpdateOneWithoutImagesNestedInput = {
+  create?: Prisma.XOR<Prisma.UnitCreateWithoutImagesInput, Prisma.UnitUncheckedCreateWithoutImagesInput>
+  connectOrCreate?: Prisma.UnitCreateOrConnectWithoutImagesInput
+  upsert?: Prisma.UnitUpsertWithoutImagesInput
+  disconnect?: Prisma.UnitWhereInput | boolean
+  delete?: Prisma.UnitWhereInput | boolean
+  connect?: Prisma.UnitWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UnitUpdateToOneWithWhereWithoutImagesInput, Prisma.UnitUpdateWithoutImagesInput>, Prisma.UnitUncheckedUpdateWithoutImagesInput>
+}
+
 export type UnitCreateWithoutPropertyInput = {
   id?: string
   createdAt?: Date | string
@@ -567,8 +708,11 @@ export type UnitCreateWithoutPropertyInput = {
   description?: string | null
   price: number
   capacity: number
-  images?: Prisma.UnitCreateimagesInput | string[]
-  features?: Prisma.UnitCreatefeaturesInput | string[]
+  bookingType?: $Enums.BookingType
+  status?: $Enums.UnitStatus
+  category: Prisma.UnitCategoryCreateNestedOneWithoutUnitsInput
+  features?: Prisma.FeatureCreateNestedManyWithoutUnitsInput
+  images?: Prisma.ImageCreateNestedManyWithoutUnitInput
   bookings?: Prisma.BookingCreateNestedManyWithoutUnitInput
 }
 
@@ -580,8 +724,11 @@ export type UnitUncheckedCreateWithoutPropertyInput = {
   description?: string | null
   price: number
   capacity: number
-  images?: Prisma.UnitCreateimagesInput | string[]
-  features?: Prisma.UnitCreatefeaturesInput | string[]
+  bookingType?: $Enums.BookingType
+  status?: $Enums.UnitStatus
+  categoryId: string
+  features?: Prisma.FeatureUncheckedCreateNestedManyWithoutUnitsInput
+  images?: Prisma.ImageUncheckedCreateNestedManyWithoutUnitInput
   bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutUnitInput
 }
 
@@ -622,9 +769,121 @@ export type UnitScalarWhereInput = {
   description?: Prisma.StringNullableFilter<"Unit"> | string | null
   price?: Prisma.IntFilter<"Unit"> | number
   capacity?: Prisma.IntFilter<"Unit"> | number
-  images?: Prisma.StringNullableListFilter<"Unit">
-  features?: Prisma.StringNullableListFilter<"Unit">
+  bookingType?: Prisma.EnumBookingTypeFilter<"Unit"> | $Enums.BookingType
+  status?: Prisma.EnumUnitStatusFilter<"Unit"> | $Enums.UnitStatus
+  categoryId?: Prisma.StringFilter<"Unit"> | string
   propertyId?: Prisma.StringFilter<"Unit"> | string
+}
+
+export type UnitCreateWithoutCategoryInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  name: string
+  description?: string | null
+  price: number
+  capacity: number
+  bookingType?: $Enums.BookingType
+  status?: $Enums.UnitStatus
+  property: Prisma.PropertyCreateNestedOneWithoutUnitsInput
+  features?: Prisma.FeatureCreateNestedManyWithoutUnitsInput
+  images?: Prisma.ImageCreateNestedManyWithoutUnitInput
+  bookings?: Prisma.BookingCreateNestedManyWithoutUnitInput
+}
+
+export type UnitUncheckedCreateWithoutCategoryInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  name: string
+  description?: string | null
+  price: number
+  capacity: number
+  bookingType?: $Enums.BookingType
+  status?: $Enums.UnitStatus
+  propertyId: string
+  features?: Prisma.FeatureUncheckedCreateNestedManyWithoutUnitsInput
+  images?: Prisma.ImageUncheckedCreateNestedManyWithoutUnitInput
+  bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutUnitInput
+}
+
+export type UnitCreateOrConnectWithoutCategoryInput = {
+  where: Prisma.UnitWhereUniqueInput
+  create: Prisma.XOR<Prisma.UnitCreateWithoutCategoryInput, Prisma.UnitUncheckedCreateWithoutCategoryInput>
+}
+
+export type UnitCreateManyCategoryInputEnvelope = {
+  data: Prisma.UnitCreateManyCategoryInput | Prisma.UnitCreateManyCategoryInput[]
+  skipDuplicates?: boolean
+}
+
+export type UnitUpsertWithWhereUniqueWithoutCategoryInput = {
+  where: Prisma.UnitWhereUniqueInput
+  update: Prisma.XOR<Prisma.UnitUpdateWithoutCategoryInput, Prisma.UnitUncheckedUpdateWithoutCategoryInput>
+  create: Prisma.XOR<Prisma.UnitCreateWithoutCategoryInput, Prisma.UnitUncheckedCreateWithoutCategoryInput>
+}
+
+export type UnitUpdateWithWhereUniqueWithoutCategoryInput = {
+  where: Prisma.UnitWhereUniqueInput
+  data: Prisma.XOR<Prisma.UnitUpdateWithoutCategoryInput, Prisma.UnitUncheckedUpdateWithoutCategoryInput>
+}
+
+export type UnitUpdateManyWithWhereWithoutCategoryInput = {
+  where: Prisma.UnitScalarWhereInput
+  data: Prisma.XOR<Prisma.UnitUpdateManyMutationInput, Prisma.UnitUncheckedUpdateManyWithoutCategoryInput>
+}
+
+export type UnitCreateWithoutFeaturesInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  name: string
+  description?: string | null
+  price: number
+  capacity: number
+  bookingType?: $Enums.BookingType
+  status?: $Enums.UnitStatus
+  category: Prisma.UnitCategoryCreateNestedOneWithoutUnitsInput
+  property: Prisma.PropertyCreateNestedOneWithoutUnitsInput
+  images?: Prisma.ImageCreateNestedManyWithoutUnitInput
+  bookings?: Prisma.BookingCreateNestedManyWithoutUnitInput
+}
+
+export type UnitUncheckedCreateWithoutFeaturesInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  name: string
+  description?: string | null
+  price: number
+  capacity: number
+  bookingType?: $Enums.BookingType
+  status?: $Enums.UnitStatus
+  categoryId: string
+  propertyId: string
+  images?: Prisma.ImageUncheckedCreateNestedManyWithoutUnitInput
+  bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutUnitInput
+}
+
+export type UnitCreateOrConnectWithoutFeaturesInput = {
+  where: Prisma.UnitWhereUniqueInput
+  create: Prisma.XOR<Prisma.UnitCreateWithoutFeaturesInput, Prisma.UnitUncheckedCreateWithoutFeaturesInput>
+}
+
+export type UnitUpsertWithWhereUniqueWithoutFeaturesInput = {
+  where: Prisma.UnitWhereUniqueInput
+  update: Prisma.XOR<Prisma.UnitUpdateWithoutFeaturesInput, Prisma.UnitUncheckedUpdateWithoutFeaturesInput>
+  create: Prisma.XOR<Prisma.UnitCreateWithoutFeaturesInput, Prisma.UnitUncheckedCreateWithoutFeaturesInput>
+}
+
+export type UnitUpdateWithWhereUniqueWithoutFeaturesInput = {
+  where: Prisma.UnitWhereUniqueInput
+  data: Prisma.XOR<Prisma.UnitUpdateWithoutFeaturesInput, Prisma.UnitUncheckedUpdateWithoutFeaturesInput>
+}
+
+export type UnitUpdateManyWithWhereWithoutFeaturesInput = {
+  where: Prisma.UnitScalarWhereInput
+  data: Prisma.XOR<Prisma.UnitUpdateManyMutationInput, Prisma.UnitUncheckedUpdateManyWithoutFeaturesInput>
 }
 
 export type UnitCreateWithoutBookingsInput = {
@@ -635,9 +894,12 @@ export type UnitCreateWithoutBookingsInput = {
   description?: string | null
   price: number
   capacity: number
-  images?: Prisma.UnitCreateimagesInput | string[]
-  features?: Prisma.UnitCreatefeaturesInput | string[]
+  bookingType?: $Enums.BookingType
+  status?: $Enums.UnitStatus
+  category: Prisma.UnitCategoryCreateNestedOneWithoutUnitsInput
   property: Prisma.PropertyCreateNestedOneWithoutUnitsInput
+  features?: Prisma.FeatureCreateNestedManyWithoutUnitsInput
+  images?: Prisma.ImageCreateNestedManyWithoutUnitInput
 }
 
 export type UnitUncheckedCreateWithoutBookingsInput = {
@@ -648,9 +910,12 @@ export type UnitUncheckedCreateWithoutBookingsInput = {
   description?: string | null
   price: number
   capacity: number
-  images?: Prisma.UnitCreateimagesInput | string[]
-  features?: Prisma.UnitCreatefeaturesInput | string[]
+  bookingType?: $Enums.BookingType
+  status?: $Enums.UnitStatus
+  categoryId: string
   propertyId: string
+  features?: Prisma.FeatureUncheckedCreateNestedManyWithoutUnitsInput
+  images?: Prisma.ImageUncheckedCreateNestedManyWithoutUnitInput
 }
 
 export type UnitCreateOrConnectWithoutBookingsInput = {
@@ -677,9 +942,12 @@ export type UnitUpdateWithoutBookingsInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.IntFieldUpdateOperationsInput | number
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
-  images?: Prisma.UnitUpdateimagesInput | string[]
-  features?: Prisma.UnitUpdatefeaturesInput | string[]
+  bookingType?: Prisma.EnumBookingTypeFieldUpdateOperationsInput | $Enums.BookingType
+  status?: Prisma.EnumUnitStatusFieldUpdateOperationsInput | $Enums.UnitStatus
+  category?: Prisma.UnitCategoryUpdateOneRequiredWithoutUnitsNestedInput
   property?: Prisma.PropertyUpdateOneRequiredWithoutUnitsNestedInput
+  features?: Prisma.FeatureUpdateManyWithoutUnitsNestedInput
+  images?: Prisma.ImageUpdateManyWithoutUnitNestedInput
 }
 
 export type UnitUncheckedUpdateWithoutBookingsInput = {
@@ -690,9 +958,92 @@ export type UnitUncheckedUpdateWithoutBookingsInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.IntFieldUpdateOperationsInput | number
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
-  images?: Prisma.UnitUpdateimagesInput | string[]
-  features?: Prisma.UnitUpdatefeaturesInput | string[]
+  bookingType?: Prisma.EnumBookingTypeFieldUpdateOperationsInput | $Enums.BookingType
+  status?: Prisma.EnumUnitStatusFieldUpdateOperationsInput | $Enums.UnitStatus
+  categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   propertyId?: Prisma.StringFieldUpdateOperationsInput | string
+  features?: Prisma.FeatureUncheckedUpdateManyWithoutUnitsNestedInput
+  images?: Prisma.ImageUncheckedUpdateManyWithoutUnitNestedInput
+}
+
+export type UnitCreateWithoutImagesInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  name: string
+  description?: string | null
+  price: number
+  capacity: number
+  bookingType?: $Enums.BookingType
+  status?: $Enums.UnitStatus
+  category: Prisma.UnitCategoryCreateNestedOneWithoutUnitsInput
+  property: Prisma.PropertyCreateNestedOneWithoutUnitsInput
+  features?: Prisma.FeatureCreateNestedManyWithoutUnitsInput
+  bookings?: Prisma.BookingCreateNestedManyWithoutUnitInput
+}
+
+export type UnitUncheckedCreateWithoutImagesInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  name: string
+  description?: string | null
+  price: number
+  capacity: number
+  bookingType?: $Enums.BookingType
+  status?: $Enums.UnitStatus
+  categoryId: string
+  propertyId: string
+  features?: Prisma.FeatureUncheckedCreateNestedManyWithoutUnitsInput
+  bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutUnitInput
+}
+
+export type UnitCreateOrConnectWithoutImagesInput = {
+  where: Prisma.UnitWhereUniqueInput
+  create: Prisma.XOR<Prisma.UnitCreateWithoutImagesInput, Prisma.UnitUncheckedCreateWithoutImagesInput>
+}
+
+export type UnitUpsertWithoutImagesInput = {
+  update: Prisma.XOR<Prisma.UnitUpdateWithoutImagesInput, Prisma.UnitUncheckedUpdateWithoutImagesInput>
+  create: Prisma.XOR<Prisma.UnitCreateWithoutImagesInput, Prisma.UnitUncheckedCreateWithoutImagesInput>
+  where?: Prisma.UnitWhereInput
+}
+
+export type UnitUpdateToOneWithWhereWithoutImagesInput = {
+  where?: Prisma.UnitWhereInput
+  data: Prisma.XOR<Prisma.UnitUpdateWithoutImagesInput, Prisma.UnitUncheckedUpdateWithoutImagesInput>
+}
+
+export type UnitUpdateWithoutImagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  price?: Prisma.IntFieldUpdateOperationsInput | number
+  capacity?: Prisma.IntFieldUpdateOperationsInput | number
+  bookingType?: Prisma.EnumBookingTypeFieldUpdateOperationsInput | $Enums.BookingType
+  status?: Prisma.EnumUnitStatusFieldUpdateOperationsInput | $Enums.UnitStatus
+  category?: Prisma.UnitCategoryUpdateOneRequiredWithoutUnitsNestedInput
+  property?: Prisma.PropertyUpdateOneRequiredWithoutUnitsNestedInput
+  features?: Prisma.FeatureUpdateManyWithoutUnitsNestedInput
+  bookings?: Prisma.BookingUpdateManyWithoutUnitNestedInput
+}
+
+export type UnitUncheckedUpdateWithoutImagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  price?: Prisma.IntFieldUpdateOperationsInput | number
+  capacity?: Prisma.IntFieldUpdateOperationsInput | number
+  bookingType?: Prisma.EnumBookingTypeFieldUpdateOperationsInput | $Enums.BookingType
+  status?: Prisma.EnumUnitStatusFieldUpdateOperationsInput | $Enums.UnitStatus
+  categoryId?: Prisma.StringFieldUpdateOperationsInput | string
+  propertyId?: Prisma.StringFieldUpdateOperationsInput | string
+  features?: Prisma.FeatureUncheckedUpdateManyWithoutUnitsNestedInput
+  bookings?: Prisma.BookingUncheckedUpdateManyWithoutUnitNestedInput
 }
 
 export type UnitCreateManyPropertyInput = {
@@ -703,8 +1054,9 @@ export type UnitCreateManyPropertyInput = {
   description?: string | null
   price: number
   capacity: number
-  images?: Prisma.UnitCreateimagesInput | string[]
-  features?: Prisma.UnitCreatefeaturesInput | string[]
+  bookingType?: $Enums.BookingType
+  status?: $Enums.UnitStatus
+  categoryId: string
 }
 
 export type UnitUpdateWithoutPropertyInput = {
@@ -715,8 +1067,11 @@ export type UnitUpdateWithoutPropertyInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.IntFieldUpdateOperationsInput | number
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
-  images?: Prisma.UnitUpdateimagesInput | string[]
-  features?: Prisma.UnitUpdatefeaturesInput | string[]
+  bookingType?: Prisma.EnumBookingTypeFieldUpdateOperationsInput | $Enums.BookingType
+  status?: Prisma.EnumUnitStatusFieldUpdateOperationsInput | $Enums.UnitStatus
+  category?: Prisma.UnitCategoryUpdateOneRequiredWithoutUnitsNestedInput
+  features?: Prisma.FeatureUpdateManyWithoutUnitsNestedInput
+  images?: Prisma.ImageUpdateManyWithoutUnitNestedInput
   bookings?: Prisma.BookingUpdateManyWithoutUnitNestedInput
 }
 
@@ -728,8 +1083,11 @@ export type UnitUncheckedUpdateWithoutPropertyInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.IntFieldUpdateOperationsInput | number
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
-  images?: Prisma.UnitUpdateimagesInput | string[]
-  features?: Prisma.UnitUpdatefeaturesInput | string[]
+  bookingType?: Prisma.EnumBookingTypeFieldUpdateOperationsInput | $Enums.BookingType
+  status?: Prisma.EnumUnitStatusFieldUpdateOperationsInput | $Enums.UnitStatus
+  categoryId?: Prisma.StringFieldUpdateOperationsInput | string
+  features?: Prisma.FeatureUncheckedUpdateManyWithoutUnitsNestedInput
+  images?: Prisma.ImageUncheckedUpdateManyWithoutUnitNestedInput
   bookings?: Prisma.BookingUncheckedUpdateManyWithoutUnitNestedInput
 }
 
@@ -741,8 +1099,113 @@ export type UnitUncheckedUpdateManyWithoutPropertyInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   price?: Prisma.IntFieldUpdateOperationsInput | number
   capacity?: Prisma.IntFieldUpdateOperationsInput | number
-  images?: Prisma.UnitUpdateimagesInput | string[]
-  features?: Prisma.UnitUpdatefeaturesInput | string[]
+  bookingType?: Prisma.EnumBookingTypeFieldUpdateOperationsInput | $Enums.BookingType
+  status?: Prisma.EnumUnitStatusFieldUpdateOperationsInput | $Enums.UnitStatus
+  categoryId?: Prisma.StringFieldUpdateOperationsInput | string
+}
+
+export type UnitCreateManyCategoryInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  name: string
+  description?: string | null
+  price: number
+  capacity: number
+  bookingType?: $Enums.BookingType
+  status?: $Enums.UnitStatus
+  propertyId: string
+}
+
+export type UnitUpdateWithoutCategoryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  price?: Prisma.IntFieldUpdateOperationsInput | number
+  capacity?: Prisma.IntFieldUpdateOperationsInput | number
+  bookingType?: Prisma.EnumBookingTypeFieldUpdateOperationsInput | $Enums.BookingType
+  status?: Prisma.EnumUnitStatusFieldUpdateOperationsInput | $Enums.UnitStatus
+  property?: Prisma.PropertyUpdateOneRequiredWithoutUnitsNestedInput
+  features?: Prisma.FeatureUpdateManyWithoutUnitsNestedInput
+  images?: Prisma.ImageUpdateManyWithoutUnitNestedInput
+  bookings?: Prisma.BookingUpdateManyWithoutUnitNestedInput
+}
+
+export type UnitUncheckedUpdateWithoutCategoryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  price?: Prisma.IntFieldUpdateOperationsInput | number
+  capacity?: Prisma.IntFieldUpdateOperationsInput | number
+  bookingType?: Prisma.EnumBookingTypeFieldUpdateOperationsInput | $Enums.BookingType
+  status?: Prisma.EnumUnitStatusFieldUpdateOperationsInput | $Enums.UnitStatus
+  propertyId?: Prisma.StringFieldUpdateOperationsInput | string
+  features?: Prisma.FeatureUncheckedUpdateManyWithoutUnitsNestedInput
+  images?: Prisma.ImageUncheckedUpdateManyWithoutUnitNestedInput
+  bookings?: Prisma.BookingUncheckedUpdateManyWithoutUnitNestedInput
+}
+
+export type UnitUncheckedUpdateManyWithoutCategoryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  price?: Prisma.IntFieldUpdateOperationsInput | number
+  capacity?: Prisma.IntFieldUpdateOperationsInput | number
+  bookingType?: Prisma.EnumBookingTypeFieldUpdateOperationsInput | $Enums.BookingType
+  status?: Prisma.EnumUnitStatusFieldUpdateOperationsInput | $Enums.UnitStatus
+  propertyId?: Prisma.StringFieldUpdateOperationsInput | string
+}
+
+export type UnitUpdateWithoutFeaturesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  price?: Prisma.IntFieldUpdateOperationsInput | number
+  capacity?: Prisma.IntFieldUpdateOperationsInput | number
+  bookingType?: Prisma.EnumBookingTypeFieldUpdateOperationsInput | $Enums.BookingType
+  status?: Prisma.EnumUnitStatusFieldUpdateOperationsInput | $Enums.UnitStatus
+  category?: Prisma.UnitCategoryUpdateOneRequiredWithoutUnitsNestedInput
+  property?: Prisma.PropertyUpdateOneRequiredWithoutUnitsNestedInput
+  images?: Prisma.ImageUpdateManyWithoutUnitNestedInput
+  bookings?: Prisma.BookingUpdateManyWithoutUnitNestedInput
+}
+
+export type UnitUncheckedUpdateWithoutFeaturesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  price?: Prisma.IntFieldUpdateOperationsInput | number
+  capacity?: Prisma.IntFieldUpdateOperationsInput | number
+  bookingType?: Prisma.EnumBookingTypeFieldUpdateOperationsInput | $Enums.BookingType
+  status?: Prisma.EnumUnitStatusFieldUpdateOperationsInput | $Enums.UnitStatus
+  categoryId?: Prisma.StringFieldUpdateOperationsInput | string
+  propertyId?: Prisma.StringFieldUpdateOperationsInput | string
+  images?: Prisma.ImageUncheckedUpdateManyWithoutUnitNestedInput
+  bookings?: Prisma.BookingUncheckedUpdateManyWithoutUnitNestedInput
+}
+
+export type UnitUncheckedUpdateManyWithoutFeaturesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  price?: Prisma.IntFieldUpdateOperationsInput | number
+  capacity?: Prisma.IntFieldUpdateOperationsInput | number
+  bookingType?: Prisma.EnumBookingTypeFieldUpdateOperationsInput | $Enums.BookingType
+  status?: Prisma.EnumUnitStatusFieldUpdateOperationsInput | $Enums.UnitStatus
+  categoryId?: Prisma.StringFieldUpdateOperationsInput | string
+  propertyId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 
@@ -751,10 +1214,14 @@ export type UnitUncheckedUpdateManyWithoutPropertyInput = {
  */
 
 export type UnitCountOutputType = {
+  features: number
+  images: number
   bookings: number
 }
 
 export type UnitCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  features?: boolean | UnitCountOutputTypeCountFeaturesArgs
+  images?: boolean | UnitCountOutputTypeCountImagesArgs
   bookings?: boolean | UnitCountOutputTypeCountBookingsArgs
 }
 
@@ -766,6 +1233,20 @@ export type UnitCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensi
    * Select specific fields to fetch from the UnitCountOutputType
    */
   select?: Prisma.UnitCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * UnitCountOutputType without action
+ */
+export type UnitCountOutputTypeCountFeaturesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.FeatureWhereInput
+}
+
+/**
+ * UnitCountOutputType without action
+ */
+export type UnitCountOutputTypeCountImagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ImageWhereInput
 }
 
 /**
@@ -784,10 +1265,14 @@ export type UnitSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   description?: boolean
   price?: boolean
   capacity?: boolean
-  images?: boolean
-  features?: boolean
+  bookingType?: boolean
+  status?: boolean
+  categoryId?: boolean
   propertyId?: boolean
+  category?: boolean | Prisma.UnitCategoryDefaultArgs<ExtArgs>
   property?: boolean | Prisma.PropertyDefaultArgs<ExtArgs>
+  features?: boolean | Prisma.Unit$featuresArgs<ExtArgs>
+  images?: boolean | Prisma.Unit$imagesArgs<ExtArgs>
   bookings?: boolean | Prisma.Unit$bookingsArgs<ExtArgs>
   _count?: boolean | Prisma.UnitCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["unit"]>
@@ -800,9 +1285,11 @@ export type UnitSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   description?: boolean
   price?: boolean
   capacity?: boolean
-  images?: boolean
-  features?: boolean
+  bookingType?: boolean
+  status?: boolean
+  categoryId?: boolean
   propertyId?: boolean
+  category?: boolean | Prisma.UnitCategoryDefaultArgs<ExtArgs>
   property?: boolean | Prisma.PropertyDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["unit"]>
 
@@ -814,9 +1301,11 @@ export type UnitSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   description?: boolean
   price?: boolean
   capacity?: boolean
-  images?: boolean
-  features?: boolean
+  bookingType?: boolean
+  status?: boolean
+  categoryId?: boolean
   propertyId?: boolean
+  category?: boolean | Prisma.UnitCategoryDefaultArgs<ExtArgs>
   property?: boolean | Prisma.PropertyDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["unit"]>
 
@@ -828,28 +1317,37 @@ export type UnitSelectScalar = {
   description?: boolean
   price?: boolean
   capacity?: boolean
-  images?: boolean
-  features?: boolean
+  bookingType?: boolean
+  status?: boolean
+  categoryId?: boolean
   propertyId?: boolean
 }
 
-export type UnitOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "name" | "description" | "price" | "capacity" | "images" | "features" | "propertyId", ExtArgs["result"]["unit"]>
+export type UnitOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "name" | "description" | "price" | "capacity" | "bookingType" | "status" | "categoryId" | "propertyId", ExtArgs["result"]["unit"]>
 export type UnitInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  category?: boolean | Prisma.UnitCategoryDefaultArgs<ExtArgs>
   property?: boolean | Prisma.PropertyDefaultArgs<ExtArgs>
+  features?: boolean | Prisma.Unit$featuresArgs<ExtArgs>
+  images?: boolean | Prisma.Unit$imagesArgs<ExtArgs>
   bookings?: boolean | Prisma.Unit$bookingsArgs<ExtArgs>
   _count?: boolean | Prisma.UnitCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UnitIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  category?: boolean | Prisma.UnitCategoryDefaultArgs<ExtArgs>
   property?: boolean | Prisma.PropertyDefaultArgs<ExtArgs>
 }
 export type UnitIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  category?: boolean | Prisma.UnitCategoryDefaultArgs<ExtArgs>
   property?: boolean | Prisma.PropertyDefaultArgs<ExtArgs>
 }
 
 export type $UnitPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Unit"
   objects: {
+    category: Prisma.$UnitCategoryPayload<ExtArgs>
     property: Prisma.$PropertyPayload<ExtArgs>
+    features: Prisma.$FeaturePayload<ExtArgs>[]
+    images: Prisma.$ImagePayload<ExtArgs>[]
     bookings: Prisma.$BookingPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -860,8 +1358,9 @@ export type $UnitPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     description: string | null
     price: number
     capacity: number
-    images: string[]
-    features: string[]
+    bookingType: $Enums.BookingType
+    status: $Enums.UnitStatus
+    categoryId: string
     propertyId: string
   }, ExtArgs["result"]["unit"]>
   composites: {}
@@ -1257,7 +1756,10 @@ readonly fields: UnitFieldRefs;
  */
 export interface Prisma__UnitClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  category<T extends Prisma.UnitCategoryDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UnitCategoryDefaultArgs<ExtArgs>>): Prisma.Prisma__UnitCategoryClient<runtime.Types.Result.GetResult<Prisma.$UnitCategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   property<T extends Prisma.PropertyDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PropertyDefaultArgs<ExtArgs>>): Prisma.Prisma__PropertyClient<runtime.Types.Result.GetResult<Prisma.$PropertyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  features<T extends Prisma.Unit$featuresArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Unit$featuresArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FeaturePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  images<T extends Prisma.Unit$imagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Unit$imagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ImagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   bookings<T extends Prisma.Unit$bookingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Unit$bookingsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BookingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1295,8 +1797,9 @@ export interface UnitFieldRefs {
   readonly description: Prisma.FieldRef<"Unit", 'String'>
   readonly price: Prisma.FieldRef<"Unit", 'Int'>
   readonly capacity: Prisma.FieldRef<"Unit", 'Int'>
-  readonly images: Prisma.FieldRef<"Unit", 'String[]'>
-  readonly features: Prisma.FieldRef<"Unit", 'String[]'>
+  readonly bookingType: Prisma.FieldRef<"Unit", 'BookingType'>
+  readonly status: Prisma.FieldRef<"Unit", 'UnitStatus'>
+  readonly categoryId: Prisma.FieldRef<"Unit", 'String'>
   readonly propertyId: Prisma.FieldRef<"Unit", 'String'>
 }
     
@@ -1696,6 +2199,54 @@ export type UnitDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * Limit how many Units to delete.
    */
   limit?: number
+}
+
+/**
+ * Unit.features
+ */
+export type Unit$featuresArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Feature
+   */
+  select?: Prisma.FeatureSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Feature
+   */
+  omit?: Prisma.FeatureOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FeatureInclude<ExtArgs> | null
+  where?: Prisma.FeatureWhereInput
+  orderBy?: Prisma.FeatureOrderByWithRelationInput | Prisma.FeatureOrderByWithRelationInput[]
+  cursor?: Prisma.FeatureWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.FeatureScalarFieldEnum | Prisma.FeatureScalarFieldEnum[]
+}
+
+/**
+ * Unit.images
+ */
+export type Unit$imagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Image
+   */
+  select?: Prisma.ImageSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Image
+   */
+  omit?: Prisma.ImageOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ImageInclude<ExtArgs> | null
+  where?: Prisma.ImageWhereInput
+  orderBy?: Prisma.ImageOrderByWithRelationInput | Prisma.ImageOrderByWithRelationInput[]
+  cursor?: Prisma.ImageWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ImageScalarFieldEnum | Prisma.ImageScalarFieldEnum[]
 }
 
 /**

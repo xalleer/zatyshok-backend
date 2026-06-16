@@ -28,22 +28,42 @@ export type User = Prisma.UserModel
  */
 export type Property = Prisma.PropertyModel
 /**
+ * Model PropertyCategory
+ * 
+ */
+export type PropertyCategory = Prisma.PropertyCategoryModel
+/**
  * Model Unit
  * 
  */
 export type Unit = Prisma.UnitModel
+/**
+ * Model UnitCategory
+ * 
+ */
+export type UnitCategory = Prisma.UnitCategoryModel
+/**
+ * Model Feature
+ * 
+ */
+export type Feature = Prisma.FeatureModel
 /**
  * Model Booking
  * 
  */
 export type Booking = Prisma.BookingModel
 /**
+ * Model Review
+ * 
+ */
+export type Review = Prisma.ReviewModel
+/**
  * Model Transaction
  * 
  */
 export type Transaction = Prisma.TransactionModel
 /**
- * Model Review
+ * Model Image
  * 
  */
-export type Review = Prisma.ReviewModel
+export type Image = Prisma.ImageModel

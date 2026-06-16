@@ -1,0 +1,216 @@
+Зрозуміло — тобі потрібна **не загальна готельна класифікація**, а саме **таксономія для outdoor / nature-based hospitality** (глемпінги, бази відпочинку, ретрити, еко-комплекси тощо).
+
+Ось практична модель, яку реально використовують у тревел/booking платформах.
+
+---
+
+# 🧭 Основні типи property для глемпінгів і баз відпочинку
+
+## 1. 🌲 Nature Retreat (ретрит / усамітнення)
+
+Фокус: тиша, природа, мінімум інфраструктури
+
+**Підтипи:**
+
+* Forest Retreat (лісовий)
+* Lake Retreat (біля води)
+* Mountain Retreat (гори)
+* Eco Retreat (еко-усамітнення)
+
+📌 Приклад: “Зарічка” (лісові будиночки без великої інфраструктури)
+
+---
+
+## 2. 🏕 Glamping Site (глемпінг)
+
+Фокус: комфорт + природа + нестандартне житло
+
+**Підтипи юнітів тут можуть бути:**
+
+* Safari tents
+* Domes
+* Yurts
+* A-frame cabins
+* Tiny houses
+* Treehouses
+
+📌 Ознака: саме “нестандартні юніти” є ядром
+
+---
+
+## 3. 🏡 Cottage Resort (котеджний комплекс)
+
+Фокус: окремі будинки + спільна територія
+
+**Підтипи:**
+
+* Individual cottages
+* Duplex cottages
+* Family houses
+
+📌 Ознака: “село з будинків”, часто з мангалами
+
+---
+
+## 4. 🏖 Leisure Base / Recreation Base (база відпочинку класична)
+
+Фокус: проста інфраструктура + природа
+
+**Характеристики:**
+
+* прості будиночки або кімнати
+* мангали, альтанки
+* мінімум сервісу
+
+📌 Це якраз “радянсько-пострадянський” тип баз
+
+---
+
+## 5. 🌊 Resort (nature resort / recreation resort)
+
+Фокус: інфраструктура + сервіс + масовий відпочинок
+
+**Може включати:**
+
+* басейни
+* ресторани/бар
+* SPA
+* анімація
+* активності
+
+📌 Приклад: “Цибулі”
+
+---
+
+## 6. 💆 Wellness / SPA Retreat
+
+Фокус: відновлення, здоров’я
+
+**Фічі:**
+
+* spa
+* сауни
+* йога
+* детокс програми
+* wellness food
+
+---
+
+## 7. 🎣 Activity-based Resort
+
+Фокус: активності як основний продукт
+
+**Підтипи:**
+
+* Fishing base
+* Hunting lodge
+* Adventure park base
+* Kayaking/rafting base
+* Ski lodge (зимовий)
+
+---
+
+## 8. 🌿 Eco Lodge / Eco Complex
+
+Фокус: екологічність + мінімальний вплив
+
+**Фічі:**
+
+* solar power
+* eco materials
+* off-grid або напів-off-grid
+* sustainable design
+
+---
+
+## 9. 🧘 Digital Detox / Silent Retreat
+
+Фокус: відсутність шуму, інтернету, стимулів
+
+**Фічі:**
+
+* без Wi-Fi (або обмежений)
+* тиша як продукт
+* медитації
+
+---
+
+# 🧱 Як це краще моделювати в платформі
+
+Замість “готель / не готель” краще:
+
+## Property Type (основний)
+
+* retreat
+* glamping_site
+* cottage_resort
+* recreation_base
+* resort
+* eco_lodge
+* wellness_retreat
+* activity_base
+
+---
+
+## + окремі поля (дуже важливо)
+
+Щоб не плодити типи:
+
+### 1. Setting (локація)
+
+* forest
+* lake
+* mountain
+* river
+* field
+
+### 2. Experience (що продають)
+
+* relaxation
+* spa
+* family
+* adventure
+* fishing
+* romantic
+* detox
+
+### 3. Accommodation style
+
+* cabins
+* tents
+* domes
+* villas
+* mixed
+
+---
+
+# 🔥 Ключова ідея (дуже важливо для продукту)
+
+👉 У цій ніші **“тип property” ≠ інфраструктура**
+
+Тип = **позиціонування продукту**
+
+А інфраструктура і юніти = фільтри
+
+---
+
+# 🧠 Простий універсальний набір (якщо хочеш MVP)
+
+Можеш почати з цього:
+
+* Retreat
+* Glamping Site
+* Cottage Resort
+* Recreation Base
+* Resort
+* Eco Lodge
+* Wellness Retreat
+* Activity Base
+
+---
+
+Якщо хочеш — можу допомогти:
+
+* зробити **ідеальну схему БД (PostgreSQL / Prisma)**
+* або **таксономію фільтрів як у Booking/Airbnb**
+* або як правильно розділити *property type vs tags vs amenities* (це там найболючіше місце)

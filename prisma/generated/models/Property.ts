@@ -20,8 +20,20 @@ export type PropertyModel = runtime.Types.Result.DefaultSelection<Prisma.$Proper
 
 export type AggregateProperty = {
   _count: PropertyCountAggregateOutputType | null
+  _avg: PropertyAvgAggregateOutputType | null
+  _sum: PropertySumAggregateOutputType | null
   _min: PropertyMinAggregateOutputType | null
   _max: PropertyMaxAggregateOutputType | null
+}
+
+export type PropertyAvgAggregateOutputType = {
+  latitude: number | null
+  longitude: number | null
+}
+
+export type PropertySumAggregateOutputType = {
+  latitude: number | null
+  longitude: number | null
 }
 
 export type PropertyMinAggregateOutputType = {
@@ -31,11 +43,20 @@ export type PropertyMinAggregateOutputType = {
   name: string | null
   slug: string | null
   description: string | null
-  coverImage: string | null
   city: string | null
   address: string | null
+  latitude: number | null
+  longitude: number | null
+  status: $Enums.PropertyStatus | null
   policy: $Enums.CancellationPolicy | null
-  isActive: boolean | null
+  contactPhone: string | null
+  contactEmail: string | null
+  website: string | null
+  checkInFrom: string | null
+  checkOutTo: string | null
+  metaTitle: string | null
+  metaDescription: string | null
+  categoryId: string | null
   hostId: string | null
 }
 
@@ -46,11 +67,20 @@ export type PropertyMaxAggregateOutputType = {
   name: string | null
   slug: string | null
   description: string | null
-  coverImage: string | null
   city: string | null
   address: string | null
+  latitude: number | null
+  longitude: number | null
+  status: $Enums.PropertyStatus | null
   policy: $Enums.CancellationPolicy | null
-  isActive: boolean | null
+  contactPhone: string | null
+  contactEmail: string | null
+  website: string | null
+  checkInFrom: string | null
+  checkOutTo: string | null
+  metaTitle: string | null
+  metaDescription: string | null
+  categoryId: string | null
   hostId: string | null
 }
 
@@ -61,16 +91,34 @@ export type PropertyCountAggregateOutputType = {
   name: number
   slug: number
   description: number
-  coverImage: number
-  images: number
   city: number
   address: number
+  latitude: number
+  longitude: number
+  status: number
   policy: number
-  isActive: number
+  contactPhone: number
+  contactEmail: number
+  website: number
+  checkInFrom: number
+  checkOutTo: number
+  metaTitle: number
+  metaDescription: number
+  categoryId: number
   hostId: number
   _all: number
 }
 
+
+export type PropertyAvgAggregateInputType = {
+  latitude?: true
+  longitude?: true
+}
+
+export type PropertySumAggregateInputType = {
+  latitude?: true
+  longitude?: true
+}
 
 export type PropertyMinAggregateInputType = {
   id?: true
@@ -79,11 +127,20 @@ export type PropertyMinAggregateInputType = {
   name?: true
   slug?: true
   description?: true
-  coverImage?: true
   city?: true
   address?: true
+  latitude?: true
+  longitude?: true
+  status?: true
   policy?: true
-  isActive?: true
+  contactPhone?: true
+  contactEmail?: true
+  website?: true
+  checkInFrom?: true
+  checkOutTo?: true
+  metaTitle?: true
+  metaDescription?: true
+  categoryId?: true
   hostId?: true
 }
 
@@ -94,11 +151,20 @@ export type PropertyMaxAggregateInputType = {
   name?: true
   slug?: true
   description?: true
-  coverImage?: true
   city?: true
   address?: true
+  latitude?: true
+  longitude?: true
+  status?: true
   policy?: true
-  isActive?: true
+  contactPhone?: true
+  contactEmail?: true
+  website?: true
+  checkInFrom?: true
+  checkOutTo?: true
+  metaTitle?: true
+  metaDescription?: true
+  categoryId?: true
   hostId?: true
 }
 
@@ -109,12 +175,20 @@ export type PropertyCountAggregateInputType = {
   name?: true
   slug?: true
   description?: true
-  coverImage?: true
-  images?: true
   city?: true
   address?: true
+  latitude?: true
+  longitude?: true
+  status?: true
   policy?: true
-  isActive?: true
+  contactPhone?: true
+  contactEmail?: true
+  website?: true
+  checkInFrom?: true
+  checkOutTo?: true
+  metaTitle?: true
+  metaDescription?: true
+  categoryId?: true
   hostId?: true
   _all?: true
 }
@@ -157,6 +231,18 @@ export type PropertyAggregateArgs<ExtArgs extends runtime.Types.Extensions.Inter
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: PropertyAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: PropertySumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: PropertyMinAggregateInputType
@@ -187,6 +273,8 @@ export type PropertyGroupByArgs<ExtArgs extends runtime.Types.Extensions.Interna
   take?: number
   skip?: number
   _count?: PropertyCountAggregateInputType | true
+  _avg?: PropertyAvgAggregateInputType
+  _sum?: PropertySumAggregateInputType
   _min?: PropertyMinAggregateInputType
   _max?: PropertyMaxAggregateInputType
 }
@@ -198,14 +286,24 @@ export type PropertyGroupByOutputType = {
   name: string
   slug: string
   description: string | null
-  coverImage: string | null
-  images: string[]
   city: string | null
   address: string | null
+  latitude: number | null
+  longitude: number | null
+  status: $Enums.PropertyStatus
   policy: $Enums.CancellationPolicy
-  isActive: boolean
+  contactPhone: string | null
+  contactEmail: string | null
+  website: string | null
+  checkInFrom: string | null
+  checkOutTo: string | null
+  metaTitle: string | null
+  metaDescription: string | null
+  categoryId: string
   hostId: string
   _count: PropertyCountAggregateOutputType | null
+  _avg: PropertyAvgAggregateOutputType | null
+  _sum: PropertySumAggregateOutputType | null
   _min: PropertyMinAggregateOutputType | null
   _max: PropertyMaxAggregateOutputType | null
 }
@@ -235,15 +333,25 @@ export type PropertyWhereInput = {
   name?: Prisma.StringFilter<"Property"> | string
   slug?: Prisma.StringFilter<"Property"> | string
   description?: Prisma.StringNullableFilter<"Property"> | string | null
-  coverImage?: Prisma.StringNullableFilter<"Property"> | string | null
-  images?: Prisma.StringNullableListFilter<"Property">
   city?: Prisma.StringNullableFilter<"Property"> | string | null
   address?: Prisma.StringNullableFilter<"Property"> | string | null
+  latitude?: Prisma.FloatNullableFilter<"Property"> | number | null
+  longitude?: Prisma.FloatNullableFilter<"Property"> | number | null
+  status?: Prisma.EnumPropertyStatusFilter<"Property"> | $Enums.PropertyStatus
   policy?: Prisma.EnumCancellationPolicyFilter<"Property"> | $Enums.CancellationPolicy
-  isActive?: Prisma.BoolFilter<"Property"> | boolean
+  contactPhone?: Prisma.StringNullableFilter<"Property"> | string | null
+  contactEmail?: Prisma.StringNullableFilter<"Property"> | string | null
+  website?: Prisma.StringNullableFilter<"Property"> | string | null
+  checkInFrom?: Prisma.StringNullableFilter<"Property"> | string | null
+  checkOutTo?: Prisma.StringNullableFilter<"Property"> | string | null
+  metaTitle?: Prisma.StringNullableFilter<"Property"> | string | null
+  metaDescription?: Prisma.StringNullableFilter<"Property"> | string | null
+  categoryId?: Prisma.StringFilter<"Property"> | string
   hostId?: Prisma.StringFilter<"Property"> | string
+  category?: Prisma.XOR<Prisma.PropertyCategoryScalarRelationFilter, Prisma.PropertyCategoryWhereInput>
   host?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   units?: Prisma.UnitListRelationFilter
+  images?: Prisma.ImageListRelationFilter
   reviews?: Prisma.ReviewListRelationFilter
 }
 
@@ -254,15 +362,25 @@ export type PropertyOrderByWithRelationInput = {
   name?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
-  coverImage?: Prisma.SortOrderInput | Prisma.SortOrder
-  images?: Prisma.SortOrder
   city?: Prisma.SortOrderInput | Prisma.SortOrder
   address?: Prisma.SortOrderInput | Prisma.SortOrder
+  latitude?: Prisma.SortOrderInput | Prisma.SortOrder
+  longitude?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
   policy?: Prisma.SortOrder
-  isActive?: Prisma.SortOrder
+  contactPhone?: Prisma.SortOrderInput | Prisma.SortOrder
+  contactEmail?: Prisma.SortOrderInput | Prisma.SortOrder
+  website?: Prisma.SortOrderInput | Prisma.SortOrder
+  checkInFrom?: Prisma.SortOrderInput | Prisma.SortOrder
+  checkOutTo?: Prisma.SortOrderInput | Prisma.SortOrder
+  metaTitle?: Prisma.SortOrderInput | Prisma.SortOrder
+  metaDescription?: Prisma.SortOrderInput | Prisma.SortOrder
+  categoryId?: Prisma.SortOrder
   hostId?: Prisma.SortOrder
+  category?: Prisma.PropertyCategoryOrderByWithRelationInput
   host?: Prisma.UserOrderByWithRelationInput
   units?: Prisma.UnitOrderByRelationAggregateInput
+  images?: Prisma.ImageOrderByRelationAggregateInput
   reviews?: Prisma.ReviewOrderByRelationAggregateInput
 }
 
@@ -276,15 +394,25 @@ export type PropertyWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"Property"> | Date | string
   name?: Prisma.StringFilter<"Property"> | string
   description?: Prisma.StringNullableFilter<"Property"> | string | null
-  coverImage?: Prisma.StringNullableFilter<"Property"> | string | null
-  images?: Prisma.StringNullableListFilter<"Property">
   city?: Prisma.StringNullableFilter<"Property"> | string | null
   address?: Prisma.StringNullableFilter<"Property"> | string | null
+  latitude?: Prisma.FloatNullableFilter<"Property"> | number | null
+  longitude?: Prisma.FloatNullableFilter<"Property"> | number | null
+  status?: Prisma.EnumPropertyStatusFilter<"Property"> | $Enums.PropertyStatus
   policy?: Prisma.EnumCancellationPolicyFilter<"Property"> | $Enums.CancellationPolicy
-  isActive?: Prisma.BoolFilter<"Property"> | boolean
+  contactPhone?: Prisma.StringNullableFilter<"Property"> | string | null
+  contactEmail?: Prisma.StringNullableFilter<"Property"> | string | null
+  website?: Prisma.StringNullableFilter<"Property"> | string | null
+  checkInFrom?: Prisma.StringNullableFilter<"Property"> | string | null
+  checkOutTo?: Prisma.StringNullableFilter<"Property"> | string | null
+  metaTitle?: Prisma.StringNullableFilter<"Property"> | string | null
+  metaDescription?: Prisma.StringNullableFilter<"Property"> | string | null
+  categoryId?: Prisma.StringFilter<"Property"> | string
   hostId?: Prisma.StringFilter<"Property"> | string
+  category?: Prisma.XOR<Prisma.PropertyCategoryScalarRelationFilter, Prisma.PropertyCategoryWhereInput>
   host?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   units?: Prisma.UnitListRelationFilter
+  images?: Prisma.ImageListRelationFilter
   reviews?: Prisma.ReviewListRelationFilter
 }, "id" | "slug">
 
@@ -295,16 +423,26 @@ export type PropertyOrderByWithAggregationInput = {
   name?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
-  coverImage?: Prisma.SortOrderInput | Prisma.SortOrder
-  images?: Prisma.SortOrder
   city?: Prisma.SortOrderInput | Prisma.SortOrder
   address?: Prisma.SortOrderInput | Prisma.SortOrder
+  latitude?: Prisma.SortOrderInput | Prisma.SortOrder
+  longitude?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
   policy?: Prisma.SortOrder
-  isActive?: Prisma.SortOrder
+  contactPhone?: Prisma.SortOrderInput | Prisma.SortOrder
+  contactEmail?: Prisma.SortOrderInput | Prisma.SortOrder
+  website?: Prisma.SortOrderInput | Prisma.SortOrder
+  checkInFrom?: Prisma.SortOrderInput | Prisma.SortOrder
+  checkOutTo?: Prisma.SortOrderInput | Prisma.SortOrder
+  metaTitle?: Prisma.SortOrderInput | Prisma.SortOrder
+  metaDescription?: Prisma.SortOrderInput | Prisma.SortOrder
+  categoryId?: Prisma.SortOrder
   hostId?: Prisma.SortOrder
   _count?: Prisma.PropertyCountOrderByAggregateInput
+  _avg?: Prisma.PropertyAvgOrderByAggregateInput
   _max?: Prisma.PropertyMaxOrderByAggregateInput
   _min?: Prisma.PropertyMinOrderByAggregateInput
+  _sum?: Prisma.PropertySumOrderByAggregateInput
 }
 
 export type PropertyScalarWhereWithAggregatesInput = {
@@ -317,12 +455,20 @@ export type PropertyScalarWhereWithAggregatesInput = {
   name?: Prisma.StringWithAggregatesFilter<"Property"> | string
   slug?: Prisma.StringWithAggregatesFilter<"Property"> | string
   description?: Prisma.StringNullableWithAggregatesFilter<"Property"> | string | null
-  coverImage?: Prisma.StringNullableWithAggregatesFilter<"Property"> | string | null
-  images?: Prisma.StringNullableListFilter<"Property">
   city?: Prisma.StringNullableWithAggregatesFilter<"Property"> | string | null
   address?: Prisma.StringNullableWithAggregatesFilter<"Property"> | string | null
+  latitude?: Prisma.FloatNullableWithAggregatesFilter<"Property"> | number | null
+  longitude?: Prisma.FloatNullableWithAggregatesFilter<"Property"> | number | null
+  status?: Prisma.EnumPropertyStatusWithAggregatesFilter<"Property"> | $Enums.PropertyStatus
   policy?: Prisma.EnumCancellationPolicyWithAggregatesFilter<"Property"> | $Enums.CancellationPolicy
-  isActive?: Prisma.BoolWithAggregatesFilter<"Property"> | boolean
+  contactPhone?: Prisma.StringNullableWithAggregatesFilter<"Property"> | string | null
+  contactEmail?: Prisma.StringNullableWithAggregatesFilter<"Property"> | string | null
+  website?: Prisma.StringNullableWithAggregatesFilter<"Property"> | string | null
+  checkInFrom?: Prisma.StringNullableWithAggregatesFilter<"Property"> | string | null
+  checkOutTo?: Prisma.StringNullableWithAggregatesFilter<"Property"> | string | null
+  metaTitle?: Prisma.StringNullableWithAggregatesFilter<"Property"> | string | null
+  metaDescription?: Prisma.StringNullableWithAggregatesFilter<"Property"> | string | null
+  categoryId?: Prisma.StringWithAggregatesFilter<"Property"> | string
   hostId?: Prisma.StringWithAggregatesFilter<"Property"> | string
 }
 
@@ -333,14 +479,23 @@ export type PropertyCreateInput = {
   name: string
   slug: string
   description?: string | null
-  coverImage?: string | null
-  images?: Prisma.PropertyCreateimagesInput | string[]
   city?: string | null
   address?: string | null
+  latitude?: number | null
+  longitude?: number | null
+  status?: $Enums.PropertyStatus
   policy?: $Enums.CancellationPolicy
-  isActive?: boolean
+  contactPhone?: string | null
+  contactEmail?: string | null
+  website?: string | null
+  checkInFrom?: string | null
+  checkOutTo?: string | null
+  metaTitle?: string | null
+  metaDescription?: string | null
+  category: Prisma.PropertyCategoryCreateNestedOneWithoutPropertiesInput
   host: Prisma.UserCreateNestedOneWithoutPropertiesInput
   units?: Prisma.UnitCreateNestedManyWithoutPropertyInput
+  images?: Prisma.ImageCreateNestedManyWithoutPropertyInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutPropertyInput
 }
 
@@ -351,14 +506,23 @@ export type PropertyUncheckedCreateInput = {
   name: string
   slug: string
   description?: string | null
-  coverImage?: string | null
-  images?: Prisma.PropertyCreateimagesInput | string[]
   city?: string | null
   address?: string | null
+  latitude?: number | null
+  longitude?: number | null
+  status?: $Enums.PropertyStatus
   policy?: $Enums.CancellationPolicy
-  isActive?: boolean
+  contactPhone?: string | null
+  contactEmail?: string | null
+  website?: string | null
+  checkInFrom?: string | null
+  checkOutTo?: string | null
+  metaTitle?: string | null
+  metaDescription?: string | null
+  categoryId: string
   hostId: string
   units?: Prisma.UnitUncheckedCreateNestedManyWithoutPropertyInput
+  images?: Prisma.ImageUncheckedCreateNestedManyWithoutPropertyInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutPropertyInput
 }
 
@@ -369,14 +533,23 @@ export type PropertyUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  images?: Prisma.PropertyUpdateimagesInput | string[]
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  status?: Prisma.EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
   policy?: Prisma.EnumCancellationPolicyFieldUpdateOperationsInput | $Enums.CancellationPolicy
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  contactPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contactEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checkInFrom?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checkOutTo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.PropertyCategoryUpdateOneRequiredWithoutPropertiesNestedInput
   host?: Prisma.UserUpdateOneRequiredWithoutPropertiesNestedInput
   units?: Prisma.UnitUpdateManyWithoutPropertyNestedInput
+  images?: Prisma.ImageUpdateManyWithoutPropertyNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutPropertyNestedInput
 }
 
@@ -387,14 +560,23 @@ export type PropertyUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  images?: Prisma.PropertyUpdateimagesInput | string[]
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  status?: Prisma.EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
   policy?: Prisma.EnumCancellationPolicyFieldUpdateOperationsInput | $Enums.CancellationPolicy
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  contactPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contactEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checkInFrom?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checkOutTo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   hostId?: Prisma.StringFieldUpdateOperationsInput | string
   units?: Prisma.UnitUncheckedUpdateManyWithoutPropertyNestedInput
+  images?: Prisma.ImageUncheckedUpdateManyWithoutPropertyNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutPropertyNestedInput
 }
 
@@ -405,12 +587,20 @@ export type PropertyCreateManyInput = {
   name: string
   slug: string
   description?: string | null
-  coverImage?: string | null
-  images?: Prisma.PropertyCreateimagesInput | string[]
   city?: string | null
   address?: string | null
+  latitude?: number | null
+  longitude?: number | null
+  status?: $Enums.PropertyStatus
   policy?: $Enums.CancellationPolicy
-  isActive?: boolean
+  contactPhone?: string | null
+  contactEmail?: string | null
+  website?: string | null
+  checkInFrom?: string | null
+  checkOutTo?: string | null
+  metaTitle?: string | null
+  metaDescription?: string | null
+  categoryId: string
   hostId: string
 }
 
@@ -421,12 +611,19 @@ export type PropertyUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  images?: Prisma.PropertyUpdateimagesInput | string[]
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  status?: Prisma.EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
   policy?: Prisma.EnumCancellationPolicyFieldUpdateOperationsInput | $Enums.CancellationPolicy
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  contactPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contactEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checkInFrom?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checkOutTo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type PropertyUncheckedUpdateManyInput = {
@@ -436,12 +633,20 @@ export type PropertyUncheckedUpdateManyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  images?: Prisma.PropertyUpdateimagesInput | string[]
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  status?: Prisma.EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
   policy?: Prisma.EnumCancellationPolicyFieldUpdateOperationsInput | $Enums.CancellationPolicy
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  contactPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contactEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checkInFrom?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checkOutTo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   hostId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
@@ -455,14 +660,6 @@ export type PropertyOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type StringNullableListFilter<$PrismaModel = never> = {
-  equals?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel> | null
-  has?: string | Prisma.StringFieldRefInput<$PrismaModel> | null
-  hasEvery?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
-  hasSome?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
-  isEmpty?: boolean
-}
-
 export type PropertyCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -470,13 +667,26 @@ export type PropertyCountOrderByAggregateInput = {
   name?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   description?: Prisma.SortOrder
-  coverImage?: Prisma.SortOrder
-  images?: Prisma.SortOrder
   city?: Prisma.SortOrder
   address?: Prisma.SortOrder
+  latitude?: Prisma.SortOrder
+  longitude?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   policy?: Prisma.SortOrder
-  isActive?: Prisma.SortOrder
+  contactPhone?: Prisma.SortOrder
+  contactEmail?: Prisma.SortOrder
+  website?: Prisma.SortOrder
+  checkInFrom?: Prisma.SortOrder
+  checkOutTo?: Prisma.SortOrder
+  metaTitle?: Prisma.SortOrder
+  metaDescription?: Prisma.SortOrder
+  categoryId?: Prisma.SortOrder
   hostId?: Prisma.SortOrder
+}
+
+export type PropertyAvgOrderByAggregateInput = {
+  latitude?: Prisma.SortOrder
+  longitude?: Prisma.SortOrder
 }
 
 export type PropertyMaxOrderByAggregateInput = {
@@ -486,11 +696,20 @@ export type PropertyMaxOrderByAggregateInput = {
   name?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   description?: Prisma.SortOrder
-  coverImage?: Prisma.SortOrder
   city?: Prisma.SortOrder
   address?: Prisma.SortOrder
+  latitude?: Prisma.SortOrder
+  longitude?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   policy?: Prisma.SortOrder
-  isActive?: Prisma.SortOrder
+  contactPhone?: Prisma.SortOrder
+  contactEmail?: Prisma.SortOrder
+  website?: Prisma.SortOrder
+  checkInFrom?: Prisma.SortOrder
+  checkOutTo?: Prisma.SortOrder
+  metaTitle?: Prisma.SortOrder
+  metaDescription?: Prisma.SortOrder
+  categoryId?: Prisma.SortOrder
   hostId?: Prisma.SortOrder
 }
 
@@ -501,17 +720,36 @@ export type PropertyMinOrderByAggregateInput = {
   name?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   description?: Prisma.SortOrder
-  coverImage?: Prisma.SortOrder
   city?: Prisma.SortOrder
   address?: Prisma.SortOrder
+  latitude?: Prisma.SortOrder
+  longitude?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   policy?: Prisma.SortOrder
-  isActive?: Prisma.SortOrder
+  contactPhone?: Prisma.SortOrder
+  contactEmail?: Prisma.SortOrder
+  website?: Prisma.SortOrder
+  checkInFrom?: Prisma.SortOrder
+  checkOutTo?: Prisma.SortOrder
+  metaTitle?: Prisma.SortOrder
+  metaDescription?: Prisma.SortOrder
+  categoryId?: Prisma.SortOrder
   hostId?: Prisma.SortOrder
+}
+
+export type PropertySumOrderByAggregateInput = {
+  latitude?: Prisma.SortOrder
+  longitude?: Prisma.SortOrder
 }
 
 export type PropertyScalarRelationFilter = {
   is?: Prisma.PropertyWhereInput
   isNot?: Prisma.PropertyWhereInput
+}
+
+export type PropertyNullableScalarRelationFilter = {
+  is?: Prisma.PropertyWhereInput | null
+  isNot?: Prisma.PropertyWhereInput | null
 }
 
 export type PropertyCreateNestedManyWithoutHostInput = {
@@ -556,21 +794,62 @@ export type PropertyUncheckedUpdateManyWithoutHostNestedInput = {
   deleteMany?: Prisma.PropertyScalarWhereInput | Prisma.PropertyScalarWhereInput[]
 }
 
-export type PropertyCreateimagesInput = {
-  set: string[]
+export type NullableFloatFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
 }
 
-export type PropertyUpdateimagesInput = {
-  set?: string[]
-  push?: string | string[]
+export type EnumPropertyStatusFieldUpdateOperationsInput = {
+  set?: $Enums.PropertyStatus
 }
 
 export type EnumCancellationPolicyFieldUpdateOperationsInput = {
   set?: $Enums.CancellationPolicy
 }
 
-export type BoolFieldUpdateOperationsInput = {
-  set?: boolean
+export type PropertyCreateNestedManyWithoutCategoryInput = {
+  create?: Prisma.XOR<Prisma.PropertyCreateWithoutCategoryInput, Prisma.PropertyUncheckedCreateWithoutCategoryInput> | Prisma.PropertyCreateWithoutCategoryInput[] | Prisma.PropertyUncheckedCreateWithoutCategoryInput[]
+  connectOrCreate?: Prisma.PropertyCreateOrConnectWithoutCategoryInput | Prisma.PropertyCreateOrConnectWithoutCategoryInput[]
+  createMany?: Prisma.PropertyCreateManyCategoryInputEnvelope
+  connect?: Prisma.PropertyWhereUniqueInput | Prisma.PropertyWhereUniqueInput[]
+}
+
+export type PropertyUncheckedCreateNestedManyWithoutCategoryInput = {
+  create?: Prisma.XOR<Prisma.PropertyCreateWithoutCategoryInput, Prisma.PropertyUncheckedCreateWithoutCategoryInput> | Prisma.PropertyCreateWithoutCategoryInput[] | Prisma.PropertyUncheckedCreateWithoutCategoryInput[]
+  connectOrCreate?: Prisma.PropertyCreateOrConnectWithoutCategoryInput | Prisma.PropertyCreateOrConnectWithoutCategoryInput[]
+  createMany?: Prisma.PropertyCreateManyCategoryInputEnvelope
+  connect?: Prisma.PropertyWhereUniqueInput | Prisma.PropertyWhereUniqueInput[]
+}
+
+export type PropertyUpdateManyWithoutCategoryNestedInput = {
+  create?: Prisma.XOR<Prisma.PropertyCreateWithoutCategoryInput, Prisma.PropertyUncheckedCreateWithoutCategoryInput> | Prisma.PropertyCreateWithoutCategoryInput[] | Prisma.PropertyUncheckedCreateWithoutCategoryInput[]
+  connectOrCreate?: Prisma.PropertyCreateOrConnectWithoutCategoryInput | Prisma.PropertyCreateOrConnectWithoutCategoryInput[]
+  upsert?: Prisma.PropertyUpsertWithWhereUniqueWithoutCategoryInput | Prisma.PropertyUpsertWithWhereUniqueWithoutCategoryInput[]
+  createMany?: Prisma.PropertyCreateManyCategoryInputEnvelope
+  set?: Prisma.PropertyWhereUniqueInput | Prisma.PropertyWhereUniqueInput[]
+  disconnect?: Prisma.PropertyWhereUniqueInput | Prisma.PropertyWhereUniqueInput[]
+  delete?: Prisma.PropertyWhereUniqueInput | Prisma.PropertyWhereUniqueInput[]
+  connect?: Prisma.PropertyWhereUniqueInput | Prisma.PropertyWhereUniqueInput[]
+  update?: Prisma.PropertyUpdateWithWhereUniqueWithoutCategoryInput | Prisma.PropertyUpdateWithWhereUniqueWithoutCategoryInput[]
+  updateMany?: Prisma.PropertyUpdateManyWithWhereWithoutCategoryInput | Prisma.PropertyUpdateManyWithWhereWithoutCategoryInput[]
+  deleteMany?: Prisma.PropertyScalarWhereInput | Prisma.PropertyScalarWhereInput[]
+}
+
+export type PropertyUncheckedUpdateManyWithoutCategoryNestedInput = {
+  create?: Prisma.XOR<Prisma.PropertyCreateWithoutCategoryInput, Prisma.PropertyUncheckedCreateWithoutCategoryInput> | Prisma.PropertyCreateWithoutCategoryInput[] | Prisma.PropertyUncheckedCreateWithoutCategoryInput[]
+  connectOrCreate?: Prisma.PropertyCreateOrConnectWithoutCategoryInput | Prisma.PropertyCreateOrConnectWithoutCategoryInput[]
+  upsert?: Prisma.PropertyUpsertWithWhereUniqueWithoutCategoryInput | Prisma.PropertyUpsertWithWhereUniqueWithoutCategoryInput[]
+  createMany?: Prisma.PropertyCreateManyCategoryInputEnvelope
+  set?: Prisma.PropertyWhereUniqueInput | Prisma.PropertyWhereUniqueInput[]
+  disconnect?: Prisma.PropertyWhereUniqueInput | Prisma.PropertyWhereUniqueInput[]
+  delete?: Prisma.PropertyWhereUniqueInput | Prisma.PropertyWhereUniqueInput[]
+  connect?: Prisma.PropertyWhereUniqueInput | Prisma.PropertyWhereUniqueInput[]
+  update?: Prisma.PropertyUpdateWithWhereUniqueWithoutCategoryInput | Prisma.PropertyUpdateWithWhereUniqueWithoutCategoryInput[]
+  updateMany?: Prisma.PropertyUpdateManyWithWhereWithoutCategoryInput | Prisma.PropertyUpdateManyWithWhereWithoutCategoryInput[]
+  deleteMany?: Prisma.PropertyScalarWhereInput | Prisma.PropertyScalarWhereInput[]
 }
 
 export type PropertyCreateNestedOneWithoutUnitsInput = {
@@ -601,6 +880,22 @@ export type PropertyUpdateOneRequiredWithoutReviewsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.PropertyUpdateToOneWithWhereWithoutReviewsInput, Prisma.PropertyUpdateWithoutReviewsInput>, Prisma.PropertyUncheckedUpdateWithoutReviewsInput>
 }
 
+export type PropertyCreateNestedOneWithoutImagesInput = {
+  create?: Prisma.XOR<Prisma.PropertyCreateWithoutImagesInput, Prisma.PropertyUncheckedCreateWithoutImagesInput>
+  connectOrCreate?: Prisma.PropertyCreateOrConnectWithoutImagesInput
+  connect?: Prisma.PropertyWhereUniqueInput
+}
+
+export type PropertyUpdateOneWithoutImagesNestedInput = {
+  create?: Prisma.XOR<Prisma.PropertyCreateWithoutImagesInput, Prisma.PropertyUncheckedCreateWithoutImagesInput>
+  connectOrCreate?: Prisma.PropertyCreateOrConnectWithoutImagesInput
+  upsert?: Prisma.PropertyUpsertWithoutImagesInput
+  disconnect?: Prisma.PropertyWhereInput | boolean
+  delete?: Prisma.PropertyWhereInput | boolean
+  connect?: Prisma.PropertyWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.PropertyUpdateToOneWithWhereWithoutImagesInput, Prisma.PropertyUpdateWithoutImagesInput>, Prisma.PropertyUncheckedUpdateWithoutImagesInput>
+}
+
 export type PropertyCreateWithoutHostInput = {
   id?: string
   createdAt?: Date | string
@@ -608,13 +903,22 @@ export type PropertyCreateWithoutHostInput = {
   name: string
   slug: string
   description?: string | null
-  coverImage?: string | null
-  images?: Prisma.PropertyCreateimagesInput | string[]
   city?: string | null
   address?: string | null
+  latitude?: number | null
+  longitude?: number | null
+  status?: $Enums.PropertyStatus
   policy?: $Enums.CancellationPolicy
-  isActive?: boolean
+  contactPhone?: string | null
+  contactEmail?: string | null
+  website?: string | null
+  checkInFrom?: string | null
+  checkOutTo?: string | null
+  metaTitle?: string | null
+  metaDescription?: string | null
+  category: Prisma.PropertyCategoryCreateNestedOneWithoutPropertiesInput
   units?: Prisma.UnitCreateNestedManyWithoutPropertyInput
+  images?: Prisma.ImageCreateNestedManyWithoutPropertyInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutPropertyInput
 }
 
@@ -625,13 +929,22 @@ export type PropertyUncheckedCreateWithoutHostInput = {
   name: string
   slug: string
   description?: string | null
-  coverImage?: string | null
-  images?: Prisma.PropertyCreateimagesInput | string[]
   city?: string | null
   address?: string | null
+  latitude?: number | null
+  longitude?: number | null
+  status?: $Enums.PropertyStatus
   policy?: $Enums.CancellationPolicy
-  isActive?: boolean
+  contactPhone?: string | null
+  contactEmail?: string | null
+  website?: string | null
+  checkInFrom?: string | null
+  checkOutTo?: string | null
+  metaTitle?: string | null
+  metaDescription?: string | null
+  categoryId: string
   units?: Prisma.UnitUncheckedCreateNestedManyWithoutPropertyInput
+  images?: Prisma.ImageUncheckedCreateNestedManyWithoutPropertyInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutPropertyInput
 }
 
@@ -671,13 +984,99 @@ export type PropertyScalarWhereInput = {
   name?: Prisma.StringFilter<"Property"> | string
   slug?: Prisma.StringFilter<"Property"> | string
   description?: Prisma.StringNullableFilter<"Property"> | string | null
-  coverImage?: Prisma.StringNullableFilter<"Property"> | string | null
-  images?: Prisma.StringNullableListFilter<"Property">
   city?: Prisma.StringNullableFilter<"Property"> | string | null
   address?: Prisma.StringNullableFilter<"Property"> | string | null
+  latitude?: Prisma.FloatNullableFilter<"Property"> | number | null
+  longitude?: Prisma.FloatNullableFilter<"Property"> | number | null
+  status?: Prisma.EnumPropertyStatusFilter<"Property"> | $Enums.PropertyStatus
   policy?: Prisma.EnumCancellationPolicyFilter<"Property"> | $Enums.CancellationPolicy
-  isActive?: Prisma.BoolFilter<"Property"> | boolean
+  contactPhone?: Prisma.StringNullableFilter<"Property"> | string | null
+  contactEmail?: Prisma.StringNullableFilter<"Property"> | string | null
+  website?: Prisma.StringNullableFilter<"Property"> | string | null
+  checkInFrom?: Prisma.StringNullableFilter<"Property"> | string | null
+  checkOutTo?: Prisma.StringNullableFilter<"Property"> | string | null
+  metaTitle?: Prisma.StringNullableFilter<"Property"> | string | null
+  metaDescription?: Prisma.StringNullableFilter<"Property"> | string | null
+  categoryId?: Prisma.StringFilter<"Property"> | string
   hostId?: Prisma.StringFilter<"Property"> | string
+}
+
+export type PropertyCreateWithoutCategoryInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  name: string
+  slug: string
+  description?: string | null
+  city?: string | null
+  address?: string | null
+  latitude?: number | null
+  longitude?: number | null
+  status?: $Enums.PropertyStatus
+  policy?: $Enums.CancellationPolicy
+  contactPhone?: string | null
+  contactEmail?: string | null
+  website?: string | null
+  checkInFrom?: string | null
+  checkOutTo?: string | null
+  metaTitle?: string | null
+  metaDescription?: string | null
+  host: Prisma.UserCreateNestedOneWithoutPropertiesInput
+  units?: Prisma.UnitCreateNestedManyWithoutPropertyInput
+  images?: Prisma.ImageCreateNestedManyWithoutPropertyInput
+  reviews?: Prisma.ReviewCreateNestedManyWithoutPropertyInput
+}
+
+export type PropertyUncheckedCreateWithoutCategoryInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  name: string
+  slug: string
+  description?: string | null
+  city?: string | null
+  address?: string | null
+  latitude?: number | null
+  longitude?: number | null
+  status?: $Enums.PropertyStatus
+  policy?: $Enums.CancellationPolicy
+  contactPhone?: string | null
+  contactEmail?: string | null
+  website?: string | null
+  checkInFrom?: string | null
+  checkOutTo?: string | null
+  metaTitle?: string | null
+  metaDescription?: string | null
+  hostId: string
+  units?: Prisma.UnitUncheckedCreateNestedManyWithoutPropertyInput
+  images?: Prisma.ImageUncheckedCreateNestedManyWithoutPropertyInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutPropertyInput
+}
+
+export type PropertyCreateOrConnectWithoutCategoryInput = {
+  where: Prisma.PropertyWhereUniqueInput
+  create: Prisma.XOR<Prisma.PropertyCreateWithoutCategoryInput, Prisma.PropertyUncheckedCreateWithoutCategoryInput>
+}
+
+export type PropertyCreateManyCategoryInputEnvelope = {
+  data: Prisma.PropertyCreateManyCategoryInput | Prisma.PropertyCreateManyCategoryInput[]
+  skipDuplicates?: boolean
+}
+
+export type PropertyUpsertWithWhereUniqueWithoutCategoryInput = {
+  where: Prisma.PropertyWhereUniqueInput
+  update: Prisma.XOR<Prisma.PropertyUpdateWithoutCategoryInput, Prisma.PropertyUncheckedUpdateWithoutCategoryInput>
+  create: Prisma.XOR<Prisma.PropertyCreateWithoutCategoryInput, Prisma.PropertyUncheckedCreateWithoutCategoryInput>
+}
+
+export type PropertyUpdateWithWhereUniqueWithoutCategoryInput = {
+  where: Prisma.PropertyWhereUniqueInput
+  data: Prisma.XOR<Prisma.PropertyUpdateWithoutCategoryInput, Prisma.PropertyUncheckedUpdateWithoutCategoryInput>
+}
+
+export type PropertyUpdateManyWithWhereWithoutCategoryInput = {
+  where: Prisma.PropertyScalarWhereInput
+  data: Prisma.XOR<Prisma.PropertyUpdateManyMutationInput, Prisma.PropertyUncheckedUpdateManyWithoutCategoryInput>
 }
 
 export type PropertyCreateWithoutUnitsInput = {
@@ -687,13 +1086,22 @@ export type PropertyCreateWithoutUnitsInput = {
   name: string
   slug: string
   description?: string | null
-  coverImage?: string | null
-  images?: Prisma.PropertyCreateimagesInput | string[]
   city?: string | null
   address?: string | null
+  latitude?: number | null
+  longitude?: number | null
+  status?: $Enums.PropertyStatus
   policy?: $Enums.CancellationPolicy
-  isActive?: boolean
+  contactPhone?: string | null
+  contactEmail?: string | null
+  website?: string | null
+  checkInFrom?: string | null
+  checkOutTo?: string | null
+  metaTitle?: string | null
+  metaDescription?: string | null
+  category: Prisma.PropertyCategoryCreateNestedOneWithoutPropertiesInput
   host: Prisma.UserCreateNestedOneWithoutPropertiesInput
+  images?: Prisma.ImageCreateNestedManyWithoutPropertyInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutPropertyInput
 }
 
@@ -704,13 +1112,22 @@ export type PropertyUncheckedCreateWithoutUnitsInput = {
   name: string
   slug: string
   description?: string | null
-  coverImage?: string | null
-  images?: Prisma.PropertyCreateimagesInput | string[]
   city?: string | null
   address?: string | null
+  latitude?: number | null
+  longitude?: number | null
+  status?: $Enums.PropertyStatus
   policy?: $Enums.CancellationPolicy
-  isActive?: boolean
+  contactPhone?: string | null
+  contactEmail?: string | null
+  website?: string | null
+  checkInFrom?: string | null
+  checkOutTo?: string | null
+  metaTitle?: string | null
+  metaDescription?: string | null
+  categoryId: string
   hostId: string
+  images?: Prisma.ImageUncheckedCreateNestedManyWithoutPropertyInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutPropertyInput
 }
 
@@ -737,13 +1154,22 @@ export type PropertyUpdateWithoutUnitsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  images?: Prisma.PropertyUpdateimagesInput | string[]
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  status?: Prisma.EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
   policy?: Prisma.EnumCancellationPolicyFieldUpdateOperationsInput | $Enums.CancellationPolicy
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  contactPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contactEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checkInFrom?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checkOutTo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.PropertyCategoryUpdateOneRequiredWithoutPropertiesNestedInput
   host?: Prisma.UserUpdateOneRequiredWithoutPropertiesNestedInput
+  images?: Prisma.ImageUpdateManyWithoutPropertyNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutPropertyNestedInput
 }
 
@@ -754,13 +1180,22 @@ export type PropertyUncheckedUpdateWithoutUnitsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  images?: Prisma.PropertyUpdateimagesInput | string[]
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  status?: Prisma.EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
   policy?: Prisma.EnumCancellationPolicyFieldUpdateOperationsInput | $Enums.CancellationPolicy
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  contactPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contactEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checkInFrom?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checkOutTo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   hostId?: Prisma.StringFieldUpdateOperationsInput | string
+  images?: Prisma.ImageUncheckedUpdateManyWithoutPropertyNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutPropertyNestedInput
 }
 
@@ -771,14 +1206,23 @@ export type PropertyCreateWithoutReviewsInput = {
   name: string
   slug: string
   description?: string | null
-  coverImage?: string | null
-  images?: Prisma.PropertyCreateimagesInput | string[]
   city?: string | null
   address?: string | null
+  latitude?: number | null
+  longitude?: number | null
+  status?: $Enums.PropertyStatus
   policy?: $Enums.CancellationPolicy
-  isActive?: boolean
+  contactPhone?: string | null
+  contactEmail?: string | null
+  website?: string | null
+  checkInFrom?: string | null
+  checkOutTo?: string | null
+  metaTitle?: string | null
+  metaDescription?: string | null
+  category: Prisma.PropertyCategoryCreateNestedOneWithoutPropertiesInput
   host: Prisma.UserCreateNestedOneWithoutPropertiesInput
   units?: Prisma.UnitCreateNestedManyWithoutPropertyInput
+  images?: Prisma.ImageCreateNestedManyWithoutPropertyInput
 }
 
 export type PropertyUncheckedCreateWithoutReviewsInput = {
@@ -788,14 +1232,23 @@ export type PropertyUncheckedCreateWithoutReviewsInput = {
   name: string
   slug: string
   description?: string | null
-  coverImage?: string | null
-  images?: Prisma.PropertyCreateimagesInput | string[]
   city?: string | null
   address?: string | null
+  latitude?: number | null
+  longitude?: number | null
+  status?: $Enums.PropertyStatus
   policy?: $Enums.CancellationPolicy
-  isActive?: boolean
+  contactPhone?: string | null
+  contactEmail?: string | null
+  website?: string | null
+  checkInFrom?: string | null
+  checkOutTo?: string | null
+  metaTitle?: string | null
+  metaDescription?: string | null
+  categoryId: string
   hostId: string
   units?: Prisma.UnitUncheckedCreateNestedManyWithoutPropertyInput
+  images?: Prisma.ImageUncheckedCreateNestedManyWithoutPropertyInput
 }
 
 export type PropertyCreateOrConnectWithoutReviewsInput = {
@@ -821,14 +1274,23 @@ export type PropertyUpdateWithoutReviewsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  images?: Prisma.PropertyUpdateimagesInput | string[]
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  status?: Prisma.EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
   policy?: Prisma.EnumCancellationPolicyFieldUpdateOperationsInput | $Enums.CancellationPolicy
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  contactPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contactEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checkInFrom?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checkOutTo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.PropertyCategoryUpdateOneRequiredWithoutPropertiesNestedInput
   host?: Prisma.UserUpdateOneRequiredWithoutPropertiesNestedInput
   units?: Prisma.UnitUpdateManyWithoutPropertyNestedInput
+  images?: Prisma.ImageUpdateManyWithoutPropertyNestedInput
 }
 
 export type PropertyUncheckedUpdateWithoutReviewsInput = {
@@ -838,14 +1300,143 @@ export type PropertyUncheckedUpdateWithoutReviewsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  images?: Prisma.PropertyUpdateimagesInput | string[]
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  status?: Prisma.EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
   policy?: Prisma.EnumCancellationPolicyFieldUpdateOperationsInput | $Enums.CancellationPolicy
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  contactPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contactEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checkInFrom?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checkOutTo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   hostId?: Prisma.StringFieldUpdateOperationsInput | string
   units?: Prisma.UnitUncheckedUpdateManyWithoutPropertyNestedInput
+  images?: Prisma.ImageUncheckedUpdateManyWithoutPropertyNestedInput
+}
+
+export type PropertyCreateWithoutImagesInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  name: string
+  slug: string
+  description?: string | null
+  city?: string | null
+  address?: string | null
+  latitude?: number | null
+  longitude?: number | null
+  status?: $Enums.PropertyStatus
+  policy?: $Enums.CancellationPolicy
+  contactPhone?: string | null
+  contactEmail?: string | null
+  website?: string | null
+  checkInFrom?: string | null
+  checkOutTo?: string | null
+  metaTitle?: string | null
+  metaDescription?: string | null
+  category: Prisma.PropertyCategoryCreateNestedOneWithoutPropertiesInput
+  host: Prisma.UserCreateNestedOneWithoutPropertiesInput
+  units?: Prisma.UnitCreateNestedManyWithoutPropertyInput
+  reviews?: Prisma.ReviewCreateNestedManyWithoutPropertyInput
+}
+
+export type PropertyUncheckedCreateWithoutImagesInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  name: string
+  slug: string
+  description?: string | null
+  city?: string | null
+  address?: string | null
+  latitude?: number | null
+  longitude?: number | null
+  status?: $Enums.PropertyStatus
+  policy?: $Enums.CancellationPolicy
+  contactPhone?: string | null
+  contactEmail?: string | null
+  website?: string | null
+  checkInFrom?: string | null
+  checkOutTo?: string | null
+  metaTitle?: string | null
+  metaDescription?: string | null
+  categoryId: string
+  hostId: string
+  units?: Prisma.UnitUncheckedCreateNestedManyWithoutPropertyInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutPropertyInput
+}
+
+export type PropertyCreateOrConnectWithoutImagesInput = {
+  where: Prisma.PropertyWhereUniqueInput
+  create: Prisma.XOR<Prisma.PropertyCreateWithoutImagesInput, Prisma.PropertyUncheckedCreateWithoutImagesInput>
+}
+
+export type PropertyUpsertWithoutImagesInput = {
+  update: Prisma.XOR<Prisma.PropertyUpdateWithoutImagesInput, Prisma.PropertyUncheckedUpdateWithoutImagesInput>
+  create: Prisma.XOR<Prisma.PropertyCreateWithoutImagesInput, Prisma.PropertyUncheckedCreateWithoutImagesInput>
+  where?: Prisma.PropertyWhereInput
+}
+
+export type PropertyUpdateToOneWithWhereWithoutImagesInput = {
+  where?: Prisma.PropertyWhereInput
+  data: Prisma.XOR<Prisma.PropertyUpdateWithoutImagesInput, Prisma.PropertyUncheckedUpdateWithoutImagesInput>
+}
+
+export type PropertyUpdateWithoutImagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  status?: Prisma.EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
+  policy?: Prisma.EnumCancellationPolicyFieldUpdateOperationsInput | $Enums.CancellationPolicy
+  contactPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contactEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checkInFrom?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checkOutTo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.PropertyCategoryUpdateOneRequiredWithoutPropertiesNestedInput
+  host?: Prisma.UserUpdateOneRequiredWithoutPropertiesNestedInput
+  units?: Prisma.UnitUpdateManyWithoutPropertyNestedInput
+  reviews?: Prisma.ReviewUpdateManyWithoutPropertyNestedInput
+}
+
+export type PropertyUncheckedUpdateWithoutImagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  status?: Prisma.EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
+  policy?: Prisma.EnumCancellationPolicyFieldUpdateOperationsInput | $Enums.CancellationPolicy
+  contactPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contactEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checkInFrom?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checkOutTo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  categoryId?: Prisma.StringFieldUpdateOperationsInput | string
+  hostId?: Prisma.StringFieldUpdateOperationsInput | string
+  units?: Prisma.UnitUncheckedUpdateManyWithoutPropertyNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutPropertyNestedInput
 }
 
 export type PropertyCreateManyHostInput = {
@@ -855,12 +1446,20 @@ export type PropertyCreateManyHostInput = {
   name: string
   slug: string
   description?: string | null
-  coverImage?: string | null
-  images?: Prisma.PropertyCreateimagesInput | string[]
   city?: string | null
   address?: string | null
+  latitude?: number | null
+  longitude?: number | null
+  status?: $Enums.PropertyStatus
   policy?: $Enums.CancellationPolicy
-  isActive?: boolean
+  contactPhone?: string | null
+  contactEmail?: string | null
+  website?: string | null
+  checkInFrom?: string | null
+  checkOutTo?: string | null
+  metaTitle?: string | null
+  metaDescription?: string | null
+  categoryId: string
 }
 
 export type PropertyUpdateWithoutHostInput = {
@@ -870,13 +1469,22 @@ export type PropertyUpdateWithoutHostInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  images?: Prisma.PropertyUpdateimagesInput | string[]
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  status?: Prisma.EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
   policy?: Prisma.EnumCancellationPolicyFieldUpdateOperationsInput | $Enums.CancellationPolicy
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  contactPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contactEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checkInFrom?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checkOutTo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.PropertyCategoryUpdateOneRequiredWithoutPropertiesNestedInput
   units?: Prisma.UnitUpdateManyWithoutPropertyNestedInput
+  images?: Prisma.ImageUpdateManyWithoutPropertyNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutPropertyNestedInput
 }
 
@@ -887,13 +1495,22 @@ export type PropertyUncheckedUpdateWithoutHostInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  images?: Prisma.PropertyUpdateimagesInput | string[]
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  status?: Prisma.EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
   policy?: Prisma.EnumCancellationPolicyFieldUpdateOperationsInput | $Enums.CancellationPolicy
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  contactPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contactEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checkInFrom?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checkOutTo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   units?: Prisma.UnitUncheckedUpdateManyWithoutPropertyNestedInput
+  images?: Prisma.ImageUncheckedUpdateManyWithoutPropertyNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutPropertyNestedInput
 }
 
@@ -904,12 +1521,118 @@ export type PropertyUncheckedUpdateManyWithoutHostInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  images?: Prisma.PropertyUpdateimagesInput | string[]
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  status?: Prisma.EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
   policy?: Prisma.EnumCancellationPolicyFieldUpdateOperationsInput | $Enums.CancellationPolicy
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  contactPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contactEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checkInFrom?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checkOutTo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  categoryId?: Prisma.StringFieldUpdateOperationsInput | string
+}
+
+export type PropertyCreateManyCategoryInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  name: string
+  slug: string
+  description?: string | null
+  city?: string | null
+  address?: string | null
+  latitude?: number | null
+  longitude?: number | null
+  status?: $Enums.PropertyStatus
+  policy?: $Enums.CancellationPolicy
+  contactPhone?: string | null
+  contactEmail?: string | null
+  website?: string | null
+  checkInFrom?: string | null
+  checkOutTo?: string | null
+  metaTitle?: string | null
+  metaDescription?: string | null
+  hostId: string
+}
+
+export type PropertyUpdateWithoutCategoryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  status?: Prisma.EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
+  policy?: Prisma.EnumCancellationPolicyFieldUpdateOperationsInput | $Enums.CancellationPolicy
+  contactPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contactEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checkInFrom?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checkOutTo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  host?: Prisma.UserUpdateOneRequiredWithoutPropertiesNestedInput
+  units?: Prisma.UnitUpdateManyWithoutPropertyNestedInput
+  images?: Prisma.ImageUpdateManyWithoutPropertyNestedInput
+  reviews?: Prisma.ReviewUpdateManyWithoutPropertyNestedInput
+}
+
+export type PropertyUncheckedUpdateWithoutCategoryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  status?: Prisma.EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
+  policy?: Prisma.EnumCancellationPolicyFieldUpdateOperationsInput | $Enums.CancellationPolicy
+  contactPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contactEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checkInFrom?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checkOutTo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hostId?: Prisma.StringFieldUpdateOperationsInput | string
+  units?: Prisma.UnitUncheckedUpdateManyWithoutPropertyNestedInput
+  images?: Prisma.ImageUncheckedUpdateManyWithoutPropertyNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutPropertyNestedInput
+}
+
+export type PropertyUncheckedUpdateManyWithoutCategoryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  status?: Prisma.EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
+  policy?: Prisma.EnumCancellationPolicyFieldUpdateOperationsInput | $Enums.CancellationPolicy
+  contactPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contactEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checkInFrom?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checkOutTo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metaTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metaDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hostId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 
@@ -919,11 +1642,13 @@ export type PropertyUncheckedUpdateManyWithoutHostInput = {
 
 export type PropertyCountOutputType = {
   units: number
+  images: number
   reviews: number
 }
 
 export type PropertyCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   units?: boolean | PropertyCountOutputTypeCountUnitsArgs
+  images?: boolean | PropertyCountOutputTypeCountImagesArgs
   reviews?: boolean | PropertyCountOutputTypeCountReviewsArgs
 }
 
@@ -947,6 +1672,13 @@ export type PropertyCountOutputTypeCountUnitsArgs<ExtArgs extends runtime.Types.
 /**
  * PropertyCountOutputType without action
  */
+export type PropertyCountOutputTypeCountImagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ImageWhereInput
+}
+
+/**
+ * PropertyCountOutputType without action
+ */
 export type PropertyCountOutputTypeCountReviewsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.ReviewWhereInput
 }
@@ -959,15 +1691,25 @@ export type PropertySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   name?: boolean
   slug?: boolean
   description?: boolean
-  coverImage?: boolean
-  images?: boolean
   city?: boolean
   address?: boolean
+  latitude?: boolean
+  longitude?: boolean
+  status?: boolean
   policy?: boolean
-  isActive?: boolean
+  contactPhone?: boolean
+  contactEmail?: boolean
+  website?: boolean
+  checkInFrom?: boolean
+  checkOutTo?: boolean
+  metaTitle?: boolean
+  metaDescription?: boolean
+  categoryId?: boolean
   hostId?: boolean
+  category?: boolean | Prisma.PropertyCategoryDefaultArgs<ExtArgs>
   host?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   units?: boolean | Prisma.Property$unitsArgs<ExtArgs>
+  images?: boolean | Prisma.Property$imagesArgs<ExtArgs>
   reviews?: boolean | Prisma.Property$reviewsArgs<ExtArgs>
   _count?: boolean | Prisma.PropertyCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["property"]>
@@ -979,13 +1721,22 @@ export type PropertySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   name?: boolean
   slug?: boolean
   description?: boolean
-  coverImage?: boolean
-  images?: boolean
   city?: boolean
   address?: boolean
+  latitude?: boolean
+  longitude?: boolean
+  status?: boolean
   policy?: boolean
-  isActive?: boolean
+  contactPhone?: boolean
+  contactEmail?: boolean
+  website?: boolean
+  checkInFrom?: boolean
+  checkOutTo?: boolean
+  metaTitle?: boolean
+  metaDescription?: boolean
+  categoryId?: boolean
   hostId?: boolean
+  category?: boolean | Prisma.PropertyCategoryDefaultArgs<ExtArgs>
   host?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["property"]>
 
@@ -996,13 +1747,22 @@ export type PropertySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   name?: boolean
   slug?: boolean
   description?: boolean
-  coverImage?: boolean
-  images?: boolean
   city?: boolean
   address?: boolean
+  latitude?: boolean
+  longitude?: boolean
+  status?: boolean
   policy?: boolean
-  isActive?: boolean
+  contactPhone?: boolean
+  contactEmail?: boolean
+  website?: boolean
+  checkInFrom?: boolean
+  checkOutTo?: boolean
+  metaTitle?: boolean
+  metaDescription?: boolean
+  categoryId?: boolean
   hostId?: boolean
+  category?: boolean | Prisma.PropertyCategoryDefaultArgs<ExtArgs>
   host?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["property"]>
 
@@ -1013,34 +1773,48 @@ export type PropertySelectScalar = {
   name?: boolean
   slug?: boolean
   description?: boolean
-  coverImage?: boolean
-  images?: boolean
   city?: boolean
   address?: boolean
+  latitude?: boolean
+  longitude?: boolean
+  status?: boolean
   policy?: boolean
-  isActive?: boolean
+  contactPhone?: boolean
+  contactEmail?: boolean
+  website?: boolean
+  checkInFrom?: boolean
+  checkOutTo?: boolean
+  metaTitle?: boolean
+  metaDescription?: boolean
+  categoryId?: boolean
   hostId?: boolean
 }
 
-export type PropertyOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "name" | "slug" | "description" | "coverImage" | "images" | "city" | "address" | "policy" | "isActive" | "hostId", ExtArgs["result"]["property"]>
+export type PropertyOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "name" | "slug" | "description" | "city" | "address" | "latitude" | "longitude" | "status" | "policy" | "contactPhone" | "contactEmail" | "website" | "checkInFrom" | "checkOutTo" | "metaTitle" | "metaDescription" | "categoryId" | "hostId", ExtArgs["result"]["property"]>
 export type PropertyInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  category?: boolean | Prisma.PropertyCategoryDefaultArgs<ExtArgs>
   host?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   units?: boolean | Prisma.Property$unitsArgs<ExtArgs>
+  images?: boolean | Prisma.Property$imagesArgs<ExtArgs>
   reviews?: boolean | Prisma.Property$reviewsArgs<ExtArgs>
   _count?: boolean | Prisma.PropertyCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type PropertyIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  category?: boolean | Prisma.PropertyCategoryDefaultArgs<ExtArgs>
   host?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 export type PropertyIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  category?: boolean | Prisma.PropertyCategoryDefaultArgs<ExtArgs>
   host?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 
 export type $PropertyPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Property"
   objects: {
+    category: Prisma.$PropertyCategoryPayload<ExtArgs>
     host: Prisma.$UserPayload<ExtArgs>
     units: Prisma.$UnitPayload<ExtArgs>[]
+    images: Prisma.$ImagePayload<ExtArgs>[]
     reviews: Prisma.$ReviewPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1050,12 +1824,20 @@ export type $PropertyPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     name: string
     slug: string
     description: string | null
-    coverImage: string | null
-    images: string[]
     city: string | null
     address: string | null
+    latitude: number | null
+    longitude: number | null
+    status: $Enums.PropertyStatus
     policy: $Enums.CancellationPolicy
-    isActive: boolean
+    contactPhone: string | null
+    contactEmail: string | null
+    website: string | null
+    checkInFrom: string | null
+    checkOutTo: string | null
+    metaTitle: string | null
+    metaDescription: string | null
+    categoryId: string
     hostId: string
   }, ExtArgs["result"]["property"]>
   composites: {}
@@ -1451,8 +2233,10 @@ readonly fields: PropertyFieldRefs;
  */
 export interface Prisma__PropertyClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  category<T extends Prisma.PropertyCategoryDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PropertyCategoryDefaultArgs<ExtArgs>>): Prisma.Prisma__PropertyCategoryClient<runtime.Types.Result.GetResult<Prisma.$PropertyCategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   host<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   units<T extends Prisma.Property$unitsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Property$unitsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UnitPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  images<T extends Prisma.Property$imagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Property$imagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ImagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   reviews<T extends Prisma.Property$reviewsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Property$reviewsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1489,12 +2273,20 @@ export interface PropertyFieldRefs {
   readonly name: Prisma.FieldRef<"Property", 'String'>
   readonly slug: Prisma.FieldRef<"Property", 'String'>
   readonly description: Prisma.FieldRef<"Property", 'String'>
-  readonly coverImage: Prisma.FieldRef<"Property", 'String'>
-  readonly images: Prisma.FieldRef<"Property", 'String[]'>
   readonly city: Prisma.FieldRef<"Property", 'String'>
   readonly address: Prisma.FieldRef<"Property", 'String'>
+  readonly latitude: Prisma.FieldRef<"Property", 'Float'>
+  readonly longitude: Prisma.FieldRef<"Property", 'Float'>
+  readonly status: Prisma.FieldRef<"Property", 'PropertyStatus'>
   readonly policy: Prisma.FieldRef<"Property", 'CancellationPolicy'>
-  readonly isActive: Prisma.FieldRef<"Property", 'Boolean'>
+  readonly contactPhone: Prisma.FieldRef<"Property", 'String'>
+  readonly contactEmail: Prisma.FieldRef<"Property", 'String'>
+  readonly website: Prisma.FieldRef<"Property", 'String'>
+  readonly checkInFrom: Prisma.FieldRef<"Property", 'String'>
+  readonly checkOutTo: Prisma.FieldRef<"Property", 'String'>
+  readonly metaTitle: Prisma.FieldRef<"Property", 'String'>
+  readonly metaDescription: Prisma.FieldRef<"Property", 'String'>
+  readonly categoryId: Prisma.FieldRef<"Property", 'String'>
   readonly hostId: Prisma.FieldRef<"Property", 'String'>
 }
     
@@ -1918,6 +2710,30 @@ export type Property$unitsArgs<ExtArgs extends runtime.Types.Extensions.Internal
   take?: number
   skip?: number
   distinct?: Prisma.UnitScalarFieldEnum | Prisma.UnitScalarFieldEnum[]
+}
+
+/**
+ * Property.images
+ */
+export type Property$imagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Image
+   */
+  select?: Prisma.ImageSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Image
+   */
+  omit?: Prisma.ImageOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ImageInclude<ExtArgs> | null
+  where?: Prisma.ImageWhereInput
+  orderBy?: Prisma.ImageOrderByWithRelationInput | Prisma.ImageOrderByWithRelationInput[]
+  cursor?: Prisma.ImageWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ImageScalarFieldEnum | Prisma.ImageScalarFieldEnum[]
 }
 
 /**

@@ -1,26 +1,37 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
+export class FeatureDto {
+  @ApiProperty() id: string;
+  @ApiProperty() name: string;
+  @ApiProperty() slug: string;
+}
+
+export class ImageDto {
+  @ApiProperty() id: string;
+  @ApiProperty() url: string;
+  @ApiProperty() sortOrder: number;
+}
+
 export class UnitResponseDto {
   @ApiProperty() id: string;
   @ApiProperty() name: string;
   @ApiPropertyOptional() description?: string | null;
-  @ApiProperty({ description: 'Ціна за ніч у копійках' }) price: number;
+  @ApiProperty() price: number;
   @ApiProperty() capacity: number;
-  @ApiProperty() images: string[];
-  @ApiProperty() features: string[];
+  @ApiProperty() status: string;
+  @ApiProperty() bookingType: string;
+  @ApiProperty({ type: [ImageDto] }) images: ImageDto[];
+  @ApiProperty({ type: [FeatureDto] }) features: FeatureDto[];
   @ApiProperty() propertyId: string;
+  @ApiProperty() categoryId: string;
   @ApiProperty() createdAt: Date;
   @ApiProperty() updatedAt: Date;
 }
 
-/**
- * Зайнятий діапазон дат для юніта.
- * Використовується фронтом для відображення в календарі.
- */
 export class OccupiedRangeDto {
-  @ApiProperty({ example: '2025-06-15' }) checkIn: string;
-  @ApiProperty({ example: '2025-06-17' }) checkOut: string;
-  @ApiProperty({ example: 'CONFIRMED' }) status: string;
+  @ApiProperty() checkIn: string;
+  @ApiProperty() checkOut: string;
+  @ApiProperty() status: string;
 }
 
 export class UnitWithAvailabilityDto extends UnitResponseDto {
